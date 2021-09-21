@@ -1,1 +1,3 @@
-# reimhard
+# Reimhard
+
+discord bot
