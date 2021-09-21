@@ -1,3 +1,3 @@
 # Reimhard
 
-discord bot &mdash dropping rhymes since 1170
+discord bot &mdash; dropping rhymes since 1170
