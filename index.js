@@ -1,8 +1,11 @@
 require('dotenv').config()
 const { Client, Intents } = require('discord.js');
 const config = require('./config.json');
+const googleTTS = require('node-google-tts-api');
 const fs = require('fs');
 
+const discordTTS = require('discord-tts'); //TODO: try
+const tts = new googleTTS();
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 client.login(process.env.BOT_TOKEN)
 
@@ -56,5 +59,24 @@ client.on("messageCreate", msg => {
         case "signmeup":
             addPlayer(msg);
             break;
+        
+        case "test123":
+            // const broadcast = client.voice.createBroadcast();
+            // const channelId = msg.member.voice.channelID;
+            // const channel = client.channels.cache.get(channelId);
+            // channel.join().then(connection => {
+            //     broadcast.play(discordTTS.getVoiceStream('test 123'));
+            //     const dispatcher = connection.play(broadcast);
+            // });
+            // break; FIXME: DEPRECATED? TODO: join voice and play mp3
     }
 })
+
+//TODO: autogenerate + send prompt + get completed prompt from player's DM channel
+tts.get({
+  text: "Der Mond scheint auf des Hundes Schnauze, deine Mutter ist ne Jause",
+  lang: "de"
+}).then(data => {
+  // returns mp3 audio src buffer
+  fs.writeFileSync("./audio.mp3", data);
+});
