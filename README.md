@@ -3,7 +3,7 @@ ___
 
 # Reimhard
 
-a discord bot &mdash; dropping rhymes since 1170.
+rap battle discord bot
 
 ___
 
