@@ -1,6 +1,9 @@
 const { Message, DMChannel } = require("discord.js");
 var gameRunning = false; //TODO: export?
 
+
+//TODO: refactoring
+
 module.exports = {
 	name: 'messageCreate',
 

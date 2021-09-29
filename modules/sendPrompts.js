@@ -26,7 +26,7 @@ const send = (usernamesPlaying, channel) => {
                 player: user,
                 prompt: prompt,
                 entry: "",
-                reactions: 0
+                votes: 0
             });
             
             // // setTimeout(() => { //TODO: set timeout until TTS should be generated

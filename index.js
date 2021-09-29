@@ -1,5 +1,5 @@
 require('dotenv').config()
-const { Client, Intents , RichEmbed} = require('discord.js');
+const { Client, Intents} = require('discord.js');
 const fs = require('fs');
 const CLIENT = new Client({ intents: [Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES] });
 
@@ -17,7 +17,7 @@ var config = {
 
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
-	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, entry:string, reactions:int}
+	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, entry:string, votes:int}
 	userStats: [] //arr of game specific data [{player:discord.user, score:int}]
 }
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
