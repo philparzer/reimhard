@@ -33,4 +33,5 @@ for (const file of eventFiles) {
 	}
 }
 
+
 module.exports = {config, gameData, CLIENT}

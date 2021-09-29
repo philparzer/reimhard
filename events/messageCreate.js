@@ -1,4 +1,4 @@
-const { Message, DMChannel } = require("discord.js");
+const { Message, DMChannel, MessageEmbed } = require("discord.js");
 var gameRunning = false; //TODO: export?
 
 
@@ -32,13 +32,20 @@ module.exports = {
             if (usersPlaying.length < playerCount) {
                 msg.channel.send(`${msg.author} is playing, ${playerCount - usersPlaying.length} more players needed`)
                 
-                
             }
             else if (usersPlaying.length === playerCount) {
-                let usernamesPlaying = usersPlaying.map(user => user)
-                let lastUser = usernamesPlaying.pop();
-                msg.channel.send(`give it up for our contestants: \n${usernamesPlaying.join(", ")} and ${lastUser} \n \n**let's go!**`)
-                SENDPROMPTS.send(usernamesPlaying, msg.channel);
+                let userFields = usersPlaying.map(user => {return {name: user.tag, value: `\u200B`}})
+
+                const START_MSG_EMBED = new MessageEmbed()
+                    .setTitle("LET'S GO")
+                    .setColor("#EBE340")
+                    .setDescription("give it up for our contestants")
+                    .addFields({name: `\u200B`, value: `\u200B`}, userFields)
+                    .setFooter("\u200B")
+                    .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.png"")
+
+                msg.channel.send({ embeds: [START_MSG_EMBED]})
+                SENDPROMPTS.send(usersPlaying, msg.channel);
                 gameRunning = true;
             }
         
