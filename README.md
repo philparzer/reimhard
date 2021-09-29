@@ -1,7 +1,4 @@
-![Reimhard logo](assets/img/reimhard_sm.png "Reimhard logo")
-___
-
-# Reimhard
+# Reimhard ![Reimhard logo](assets/img/reimhard_sm.png "Reimhard logo")
 
 rap battle discord bot
 
