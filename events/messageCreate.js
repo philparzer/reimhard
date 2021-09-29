@@ -24,7 +24,7 @@ module.exports = {
                         
                         if (dataBlock.promptCompleted === false) {
                             
-                            dataBlock.entry += `${msg.content} `;
+                            dataBlock.entry += `${msg.content}, `;
                             SENDPROMPTS.updateDM(msg.content, msg.author) //TODO: pass in time
                             console.log("userData-----------------")
                             console.log(INDEX.gameData.userRoundData)
@@ -34,8 +34,6 @@ module.exports = {
                     
                     }
                 })
-            
-            
 
             return;
         }

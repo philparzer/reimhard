@@ -9,8 +9,8 @@ const ROUNDS = INDEX.config.rounds;
 var currentRound = 0; //TODO: refactor into some other script?
 var startSeconds; //TODO: refactor into timer.js?
 
-var prompt = "Der Mond scheint auf des Hundes Schnauze " //TODO: pick randomly from data structure
-var prompt2 = "Hinten unten bei mir in der Küche "//TODO: pick randomly from data structure
+var prompt = "Der Mond scheint auf des Hundes Schnauze" //TODO: pick randomly from data structure
+var prompt2 = "Hinten unten bei mir in der Küche"//TODO: pick randomly from data structure
 var entry1 = "___";
 var entry2 = "___";
 
@@ -44,7 +44,7 @@ const send = (usersPlaying, channel) => {
             
             INDEX.gameData.userRoundData.push({
                 player: user,
-                prompt: prompt + prompt2,
+                prompt: prompt + ", " + prompt2 + ", ",
                 entry: "",
                 promptCompleted: false,
                 votes: 0
@@ -74,6 +74,7 @@ const send = (usersPlaying, channel) => {
 const updateDM = (entry, user) => {
 
     var updatedTime = new Date().getTime() / 1000;
+    var timeLeft = Math.floor((startSeconds + INDEX.config.countdown) - updatedTime); //TODO: make this global somehow
 
     //check if call was first or second line and set variables accordingly
     if (entry1 === "___") {entry1 = entry} 
@@ -95,7 +96,7 @@ const updateDM = (entry, user) => {
                     {name: `\u200B`, value: `\`\`\`- ${prompt}\n- ${prompt2}\n- ${entry1}\n- ${entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
-                .setFooter(`time left: ${Math.floor((startSeconds + INDEX.config.countdown) -updatedTime)}s`)
+                .setFooter(`time left: ${timeLeft}s`)
                     
     user.send({ embeds: [updatedDM]});
     
@@ -104,6 +105,11 @@ const updateDM = (entry, user) => {
     if (entry1 !== "___" && entry2 !== "___")
     {
         doneDM(user)
+
+
+
+        //TODO: move somewhere else
+        GENERATE_TTS.generate(user);
     }
 
 }

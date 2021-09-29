@@ -8,7 +8,7 @@ CLIENT.login(process.env.BOT_TOKEN)
 //config///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 var config = {
-    language: 'en', //ISO language code
+    language: 'de', //ISO language code
     playerCount: 1, //players needed until reimhard starts the game
 	countdown: 30, //in seconds
 	rounds: 5 //how many prompts are send to each user
