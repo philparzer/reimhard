@@ -42,7 +42,7 @@ module.exports = {
                     .setDescription("give it up for our contestants")
                     .addFields({name: `\u200B`, value: `\u200B`}, userFields)
                     .setFooter("\u200B")
-                    .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.png"")
+                    .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.jpeg")
 
                 msg.channel.send({ embeds: [START_MSG_EMBED]})
                 SENDPROMPTS.send(usersPlaying, msg.channel);
