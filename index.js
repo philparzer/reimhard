@@ -20,6 +20,7 @@ var gameData = {
 	userStats: [] //arr of game specific data [{player:discord.user, score:int}]
 }
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
+// Set the bot's "Playing: " status (must be in an event!)
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 

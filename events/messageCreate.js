@@ -87,9 +87,26 @@ module.exports = {
                 addPlayer();
                 break;
             
-            case "test123":
-                console.log("test")
+            case "reimhard.commands": //TODO: EMBED
+
+                const COMMANDS_EMBED = new MessageEmbed()
+                    .setTitle("COMMANDS")
+                    .setColor("#58BEEB")
+                    
+                    .addFields(
+                        {name: "\u200B", value: "GAME"},
+                        {name: "```signmeup```", value: "start playing / join the queue"},
+                        {name: "\u200B", value: "META"},
+                        {name: "```reimhard.settings```", value: "set game rules"},
+                        {name: "```reimhard.commands```", value: "get all available commands"})
+                    .setFooter("\u200B")
+
+                msg.channel.send({embeds: [COMMANDS_EMBED]})
                 break;
+
+            case "reimhard.settings": //TODO: EMBED, IMPLEMENT
+                msg.channel.send("```TODO```")
+
         }
         
 	}
