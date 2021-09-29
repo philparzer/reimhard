@@ -7,4 +7,4 @@ rap battle discord bot
 
 ___
 
-currently in prototyping
+under construction
