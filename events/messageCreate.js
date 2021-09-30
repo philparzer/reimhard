@@ -11,26 +11,25 @@ module.exports = {
         
         const INDEX = require("../index.js")
         const SENDPROMPTS = require("../modules/sendPrompts")
+        const TIMER = require("../modules/timer.js")
         var usersPlaying = INDEX.gameData.usersPlaying;
         var playerCount = INDEX.config.playerCount;
 
 //DM///////////////////////////////////////////////////////////////////////////////////////////////////////
         if (msg.channel.type === "DM" && usersPlaying.includes(msg.author)) {
 
-            console.log(msg.content);
             INDEX.gameData.userRoundData.forEach(dataBlock => {
 
                     if (dataBlock.player === msg.author) {
                         
-                        if (dataBlock.promptCompleted === false) {
+                        if (dataBlock.promptCompleted === false && INDEX.gameData.timerRunning === true) {
                             
                             dataBlock.entry += `${msg.content}, `;
                             SENDPROMPTS.updateDM(msg.content, msg.author) //TODO: pass in time
-                            console.log("userData-----------------")
-                            console.log(INDEX.gameData.userRoundData)
+                            
                         }
                         
-                        else {SENDPROMPTS.doneDM(msg.author)}
+                        else {SENDPROMPTS.roundEndDM(msg.author)}
                     
                     }
                 })
@@ -50,10 +49,8 @@ module.exports = {
 
             if (gameRunning) {msg.channel.send(`game has already started, sign up later`); return;};
 
-                usersPlaying.push(msg.author)
-                console.log(usersPlaying)
-                console.log(playerCount)
-            
+            usersPlaying.push(msg.author)
+
             if (usersPlaying.length < playerCount) {
                 msg.channel.send(`${msg.author} is playing, ${playerCount - usersPlaying.length} more players needed`)
                 

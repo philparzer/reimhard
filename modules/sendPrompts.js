@@ -3,11 +3,10 @@ const INDEX = require("../index.js")
 const GENERATE_TTS = require("./generateTTS.js")
 const END_GAME = require("./endGame.js");
 const INITIALIZE_GAME = require("./initializeGame.js");
-const { start } = require("repl");
+const TIMER = require("./timer.js")
 const ROUNDS = INDEX.config.rounds;
 
-var currentRound = 0; //TODO: refactor into some other script?
-var startSeconds; //TODO: refactor into timer.js?
+var startSeconds;
 
 var prompt = "Der Mond scheint auf des Hundes Schnauze" //TODO: pick randomly from data structure
 var prompt2 = "Hinten unten bei mir in der Küche"//TODO: pick randomly from data structure
@@ -18,21 +17,31 @@ var entry2 = "___";
 const send = (usersPlaying, channel) => {
     
     //initialize players if first round
-    if (currentRound === 0) {
-        INITIALIZE_GAME.initStats(usersPlaying)
+    if (INDEX.gameData.currentRound === 1) {
+        INITIALIZE_GAME.initStats(usersPlaying);
+        TIMER.START_TIMER();
         startSeconds = new Date().getTime() / 1000;
     }
 
     //sends prompts to players and sets round data
-    if (currentRound < ROUNDS) {
-        currentRound++;
+    if (INDEX.gameData.currentRound < ROUNDS) {
+        INDEX.gameData.currentRound++;
         startSeconds = new Date().getTime() / 1000;
 
         usersPlaying.forEach(user => {
 
+            setTimeout(function(){
+
+                INDEX.gameData.userRoundData.forEach(dataBlock => {
+
+                    if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);}
+                })
+           
+            }, INDEX.config.countdown * 1000);
+
             const PROMPT_EMBED = new MessageEmbed()
                 .setColor("#EBE340")
-                .setAuthor(`ROUND ${currentRound}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
                 .addFields(
                     {name: `\u200B`, value: `\`\`\`- ${prompt}\n- ${prompt2}\n- ___\n- ___\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
@@ -50,21 +59,7 @@ const send = (usersPlaying, channel) => {
                 votes: 0
             });
             
-            // // setTimeout(() => { //TODO: refactor, maybe timer.js?
-            // //     // GENERATE_TTS.generate();
-            // // }, 5000)
-            
         })
-
-        console.log("INDEX DATA STORAGE")
-        console.log("----------------------------------")
-        console.log("GAME DATA")
-        console.log("----------------------------------")
-        console.log(JSON.stringify(INDEX.gameData.userStats));
-        console.log("ROUND DATA")
-        console.log("----------------------------------")
-        console.log(INDEX.gameData.userRoundData);
-
     }
 
     else {END_GAME.init()};
@@ -91,7 +86,7 @@ const updateDM = (entry, user) => {
 
     let updatedDM = new MessageEmbed()
                 .setColor("#F2C12B")
-                .setAuthor(`ROUND ${currentRound}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
                 .addFields(
                     {name: `\u200B`, value: `\`\`\`- ${prompt}\n- ${prompt2}\n- ${entry1}\n- ${entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
@@ -119,9 +114,25 @@ const updateDM = (entry, user) => {
 const doneDM = (user) => {
     const DONE_DM_EMBED = new MessageEmbed()
                 .setColor("#EB7E28")
-                .setAuthor(`ROUND ${currentRound} COMPLETED`) 
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} COMPLETED`) 
             user.send({ embeds: [DONE_DM_EMBED]});
 }
 
 
-module.exports = {send, updateDM, doneDM}
+const notCompletedDM = (user) => {
+    const NOT_COMPLETED_DM_EMBED = new MessageEmbed()
+                .setColor("#ED4245")
+                .setAuthor(`TIME'S UP FOR ROUND ${INDEX.gameData.currentRound -1}`)
+                .setFooter('hurry up next time')
+            user.send({ embeds: [NOT_COMPLETED_DM_EMBED]});
+}
+
+const roundEndDM = (user) => {
+    const ROUND_END_DM_EMBED = new MessageEmbed()
+                .setColor("#EB7E28")
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} HAS ENDED`)
+            user.send({ embeds: [ROUND_END_DM_EMBED]});
+}
+
+
+module.exports = {send, updateDM, doneDM, roundEndDM}

@@ -17,7 +17,9 @@ var config = {
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
 	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, entry:string, promptCompleted:bool, votes:int}
-	userStats: [] //arr of game specific data [{player:discord.user, score:int}]
+	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
+	timerRunning: false,
+	currentRound: 1
 }
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
 // Set the bot's "Playing: " status (must be in an event!)
