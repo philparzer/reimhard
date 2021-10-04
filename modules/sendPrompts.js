@@ -8,13 +8,11 @@ const ROUNDS = INDEX.config.rounds;
 
 var startSeconds;
 
-var prompt = "Der Mond scheint auf des Hundes Schnauze" //TODO: pick randomly from data structure
+var prompt1 = "Der Mond scheint auf des Hundes Schnauze" //TODO: pick randomly from data structure
 var prompt2 = "Hinten unten bei mir in der Küche"//TODO: pick randomly from data structure
-var entry1 = "___";
-var entry2 = "___";
 
 //send round prompts to all players///////////////////////////////////////////////////////////////////////////////////////////////////////
-const send = (usersPlaying, channel) => {
+const send = (usersPlaying) => {
     
     //initialize players if first round
     if (INDEX.gameData.currentRound === 1) {
@@ -34,16 +32,20 @@ const send = (usersPlaying, channel) => {
 
                 INDEX.gameData.userRoundData.forEach(dataBlock => {
 
-                    if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);}
+                    //FIXME:
+                    if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
                 })
            
             }, INDEX.config.countdown * 1000);
+
+
+            //TODO: pick prompts here randomly from data structure
 
             const PROMPT_EMBED = new MessageEmbed()
                 .setColor("#EBE340")
                 .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
                 .addFields(
-                    {name: `\u200B`, value: `\`\`\`- ${prompt}\n- ${prompt2}\n- ___\n- ___\`\`\``},
+                    {name: `\u200B`, value: `\`\`\`- ${prompt1}\n- ${prompt2}\n- ___\n- ___\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
                 .setFooter(`time left: ${INDEX.config.countdown}s`)
@@ -53,8 +55,10 @@ const send = (usersPlaying, channel) => {
             
             INDEX.gameData.userRoundData.push({
                 player: user,
-                prompt: prompt + ", " + prompt2 + ", ",
-                entry: "",
+                prompt1: prompt1,
+                prompt2: prompt2,
+                entry1: "___",
+                entry2: "___",
                 promptCompleted: false,
                 votes: 0
             });
@@ -66,46 +70,47 @@ const send = (usersPlaying, channel) => {
 }
 
 //send preview of user's entries after they sent a DM///////////////////////////////////////////////////////////////////////////////////////////////////////
-const updateDM = (entry, user) => {
+const updateDM = (entry, user) => { //FIXME:
 
-    var updatedTime = new Date().getTime() / 1000;
-    var timeLeft = Math.floor((startSeconds + INDEX.config.countdown) - updatedTime); //TODO: make this global somehow
+    let updatedTime = new Date().getTime() / 1000;
+    let timeLeft = Math.floor((startSeconds + INDEX.config.countdown) - updatedTime); //TODO: make this global somehow
+    let shouldSendDoneDM = false;
 
-    //check if call was first or second line and set variables accordingly
-    if (entry1 === "___") {entry1 = entry} 
-    else if (entry2 === "___") {
-        
-        entry2 = entry
+    INDEX.gameData.userRoundData.forEach(dataBlock => {
 
-        INDEX.gameData.userRoundData.forEach(dataBlock => {
+            if (dataBlock.player === user) {
 
-            if (dataBlock.player === user) {dataBlock.promptCompleted = true;}
-        })
-        
-    }
+                    shouldSendDoneDM = false;
 
-    let updatedDM = new MessageEmbed()
-                .setColor("#F2C12B")
-                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
-                .addFields(
-                    {name: `\u200B`, value: `\`\`\`- ${prompt}\n- ${prompt2}\n- ${entry1}\n- ${entry2}\`\`\``},
-                    {name: `\u200B`, value: `\u200B`}
-                )
-                .setFooter(`time left: ${timeLeft}s`)
+                    if (dataBlock.entry1 === "___") {dataBlock.entry1 = entry}    //TODO: maybe guard this === undefined and change in output to stop players from using ___ and breaking game
                     
-    user.send({ embeds: [updatedDM]});
-    
+                    else if (dataBlock.entry2 === "___"){
+                        dataBlock.entry2 = entry;
+                        dataBlock.promptCompleted = true;
+                        shouldSendDoneDM = true;
+                        GENERATE_TTS.generate(user);
+                    }
 
-    //if this was final prompt to complete send done message
-    if (entry1 !== "___" && entry2 !== "___")
-    {
-        doneDM(user)
+                    else {console.log("updateDM_ERR")}
+                    
+
+                    let updatedDM = new MessageEmbed()
+                    .setColor("#F2C12B")
+                    .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
+                    .addFields(
+                        {name: `\u200B`, value: `\`\`\`- ${dataBlock.prompt1}\n- ${dataBlock.prompt2}\n- ${dataBlock.entry1}\n- ${dataBlock.entry2}\`\`\``},
+                        {name: `\u200B`, value: `\u200B`}
+                    )
+                    .setFooter(`time left: ${timeLeft}s`)
+                        
+                    dataBlock.player.send({ embeds: [updatedDM]});
+
+                    if (shouldSendDoneDM) {doneDM(dataBlock.player);}
 
 
+                }    
+    })
 
-        //TODO: move somewhere else
-        GENERATE_TTS.generate(user);
-    }
 
 }
 

@@ -5,24 +5,29 @@ const CLIENT = new Client({ intents: [Intents.FLAGS.GUILD_PRESENCES, Intents.FLA
 
 CLIENT.login(process.env.BOT_TOKEN)
 
-//config///////////////////////////////////////////////////////////////////////////////////////////////////////
+//data///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+const GUILD_DATA = {
+	serverID: ""
+};
 
 var config = {
     language: 'de', //ISO language code
-    playerCount: 1, //players needed until reimhard starts the game
-	countdown: 30, //in seconds
+    playerCount: 2, //players needed until reimhard starts the game
+	countdown: 60, //in seconds
 	rounds: 5 //how many prompts are send to each user
 }
 
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
-	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, entry:string, promptCompleted:bool, votes:int}
+	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, TODO: entry1:, TODO: entry2: TODO: outputString: , promptCompleted:bool, votes:int}
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
 	currentRound: 1
 }
+
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
-// Set the bot's "Playing: " status (must be in an event!)
+
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
@@ -38,4 +43,4 @@ for (const file of eventFiles) {
 
 
 
-module.exports = {config, gameData, CLIENT}
+module.exports = {config, gameData, CLIENT, GUILD_DATA}

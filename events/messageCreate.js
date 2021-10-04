@@ -15,7 +15,10 @@ module.exports = {
         var usersPlaying = INDEX.gameData.usersPlaying;
         var playerCount = INDEX.config.playerCount;
 
-//DM///////////////////////////////////////////////////////////////////////////////////////////////////////
+//IGNORE BOTS////////////////////////////////////////////////////////////////////////////////////////////////
+        if (msg.author.bot) return;
+
+//DM//////////////////////////////////////////////////////////////////////////////////////////////////////////
         if (msg.channel.type === "DM" && usersPlaying.includes(msg.author)) {
 
             INDEX.gameData.userRoundData.forEach(dataBlock => {
@@ -24,11 +27,9 @@ module.exports = {
                         
                         if (dataBlock.promptCompleted === false && INDEX.gameData.timerRunning === true) {
                             
-                            dataBlock.entry += `${msg.content}, `;
                             SENDPROMPTS.updateDM(msg.content, msg.author) //TODO: pass in time
                             
                         }
-                        
                         else {SENDPROMPTS.roundEndDM(msg.author)}
                     
                     }
@@ -42,7 +43,7 @@ module.exports = {
         //adds a player to game queue if empty seat
         const addPlayer = () => {
 
-            if (usersPlaying.includes(msg.author)){ //TODO: uncomment
+            if (usersPlaying.includes(msg.author)){ //TODO: uncomment / uncomment for testing
                 msg.channel.send(`come on ${msg.author}... you're already on my list`)
                 return;
             }
@@ -66,15 +67,18 @@ module.exports = {
                     .setDescription("give it up for our contestants")
                     .addFields({name: `\u200B`, value: `\u200B`}, userFields)
                     .setFooter("\u200B")
-                    .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.jpeg") //TODO: look into this
+                    .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.jpeg")
 
                 msg.channel.send({ embeds: [START_MSG_EMBED]})
-                SENDPROMPTS.send(usersPlaying, msg.channel);
+                SENDPROMPTS.send(usersPlaying);
                 gameRunning = true;
             }
 
             else {console.log("err")}
         }
+        
+        //FIXME:
+        if (INDEX.GUILD_DATA.serverID === "") {INDEX.GUILD_DATA.serverID = msg.guild; console.log("GUILD ID: " + INDEX.GUILD_DATA.serverID);}
         
 
         switch (msg.content) {
@@ -82,7 +86,7 @@ module.exports = {
                 addPlayer();
                 break;
             
-            case "reimhard.commands": //TODO: EMBED
+            case "reimhard.commands":
 
                 const COMMANDS_EMBED = new MessageEmbed()
                     .setTitle("COMMANDS")

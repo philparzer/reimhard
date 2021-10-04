@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/philparzer/reimhard#readme",
   "dependencies": {
+    "@discordjs/voice": "^0.6.0",
     "audioconcat": "^0.1.4",
     "discord-tts": "^1.2.0",
     "discord.js": "^13.1.0",
