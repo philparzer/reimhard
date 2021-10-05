@@ -2,6 +2,7 @@ const googleTTS = require('node-google-tts-api');
 const fs = require('fs');
 const TTS = new googleTTS();
 const INDEX = require("../index.js")
+const AUDIO = require("./audio.js")
 
 
 
@@ -25,6 +26,10 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
           }).then(data => {
             // returns mp3 audio src buffer
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
+
+            //TODO: change position
+            console.log("mix audio")
+            AUDIO.mixEntryAndBG(user.tag) //TODO: implement different bgs
         });
     }
 
@@ -40,10 +45,20 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
           }).then(arr => {
             let data = TTS.concat(arr);
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
+
+            //TODO: change position
+            console.log("mix audio")
+            AUDIO.mixEntryAndBG(user.tag) //TODO: implement different bgs
           });
-    }
-    
+    }    
 }
 
+
+//TODO: generate user intro e.g "ur turn ${user.username}!"
+/*
+    const generateIntro = () => {
+        generate user intro e.g "ur turn ${user.username}!"
+    }
+*/
 
 module.exports = {generate}
