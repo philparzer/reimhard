@@ -13,7 +13,7 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
     INDEX.gameData.userRoundData.forEach(dataBlock => {
 
         if (dataBlock.player === user) {
-            ttsText = dataBlock.prompt1 + dataBlock.prompt2 + dataBlock.entry1 + dataBlock.entry2;
+            ttsText = dataBlock.prompt1 + ", " + dataBlock.prompt2 + ", " + dataBlock.entry1 + ", " + dataBlock.entry2 + ", ";
         }
     })
 
