@@ -1,4 +1,3 @@
 .env
 node_modules
-assets/audio/tts/*
-!assets/audio/tts/.gitkeep
+assets/audio/tts/
