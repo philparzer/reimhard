@@ -1,4 +1,4 @@
-![Reimhard logo](assets/img/reimhard_sm.png "Reimhard logo" width="400" height="790")
+<img src="https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_sm.png" width="50" height="50">
 
 # Reimhard 
 
