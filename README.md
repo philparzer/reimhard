@@ -1,6 +1,8 @@
 
 
-<img src="/assets/img/banner.png">
+<img style ="text-align: start" src="/assets/img/banner.png">
+
+___
 
 rap battle discord bot — dropping 🔥 rhymes since 1170\
 \
