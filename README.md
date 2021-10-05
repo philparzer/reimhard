@@ -1,6 +1,6 @@
 
 
-<img style ="text-align: start" src="/assets/img/banner.png">
+<img style ="margin-left: -20px" src="/assets/img/banner.png">
 
 ___
 
