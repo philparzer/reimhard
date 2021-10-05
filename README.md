@@ -1,6 +1,6 @@
 
 
- <img src="https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/banner.png">
+<img src="https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/banner.png">
 
 rap battle discord bot — dropping 🔥 rhymes since 1170\
 \
