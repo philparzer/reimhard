@@ -1,6 +1,6 @@
 
 
-# Reimhard <span><img src="https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_sm.png" width="50" height="50"></span>
+ <span><img src="https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_sm.png" width="100" height="100"></span> # Reimhard
 
 rap battle discord bot — dropping 🔥 rhymes since 1170\
 \
