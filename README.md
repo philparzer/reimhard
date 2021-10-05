@@ -1,4 +1,4 @@
-![Reimhard logo](assets/img/reimhard_sm.png?s=25 "Reimhard logo")
+![Reimhard logo](assets/img/reimhard_sm.png "Reimhard logo" width="400" height="790")
 
 # Reimhard 
 
