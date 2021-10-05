@@ -2,6 +2,7 @@ const { DiscordAPIError, MessageEmbed } = require("discord.js")
 const INDEX = require("../index.js")
 const GENERATE_TTS = require("./generateTTS.js")
 const END_GAME = require("./endGame.js");
+const END_ROUND = require("./endRound.js")
 const INITIALIZE_GAME = require("./initializeGame.js");
 const TIMER = require("./timer.js")
 const ROUNDS = INDEX.config.rounds;
@@ -21,7 +22,7 @@ const send = (usersPlaying) => {
         startSeconds = new Date().getTime() / 1000;
     }
 
-    //sends prompts to players and sets round data
+    //sends prompts to players and sets round data & set round timer
     if (INDEX.gameData.currentRound < ROUNDS) {
         INDEX.gameData.currentRound++;
         startSeconds = new Date().getTime() / 1000;
@@ -34,12 +35,25 @@ const send = (usersPlaying) => {
 
                     //FIXME:
                     if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
+                    //TODO:
+                    //END_ROUND.todo()
                 })
            
             }, INDEX.config.countdown * 1000);
 
 
             //TODO: pick prompts here randomly from data structure
+
+
+            INDEX.gameData.userRoundData.push({
+                player: user,
+                prompt1: prompt1,
+                prompt2: prompt2,
+                entry1: "___",
+                entry2: "___",
+                promptCompleted: false,
+                votes: 0
+            });
 
             const PROMPT_EMBED = new MessageEmbed()
                 .setColor("#EBE340")
@@ -53,15 +67,7 @@ const send = (usersPlaying) => {
             user.send({ embeds: [PROMPT_EMBED]});
             
             
-            INDEX.gameData.userRoundData.push({
-                player: user,
-                prompt1: prompt1,
-                prompt2: prompt2,
-                entry1: "___",
-                entry2: "___",
-                promptCompleted: false,
-                votes: 0
-            });
+           
             
         })
     }

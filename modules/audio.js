@@ -1,32 +1,34 @@
 const { createAudioPlayer, NoSubscriberBehavior, joinVoiceChannel } = require('@discordjs/voice');
+const { join } = require('path');
+const { createAudioResource, StreamType } = require('@discordjs/voice');
 const INDEX = require('../index.js')
 
 
+//TODO: cut bg file using ffmpeg
 
-
-const startAudio = (channel) => {// FIXME: channel
+const initializeAudioPlayer = (channel) => {
 
     console.log("channel to join: " + JSON.stringify(channel))
 
-    // FIXME:
-    // const connection = joinVoiceChannel({
-    //     channelId: INDEX.gameData.usersPlaying[0].id,
-    //     guildId: INDEX.GUILD_DATA.serverID,
-    //     adapterCreator: channel.guild.voiceAdapterCreator,
-    // });
+    // FIXME: clean this up?
+    const connection = joinVoiceChannel({
+        channelId: channel.id,
+        guildId: channel.guild.id,
+	    adapterCreator: channel.guild.voiceAdapterCreator,
+    });
 
-    // const player = createAudioPlayer({
-    //     behaviors: {
-    //         noSubscriber: NoSubscriberBehavior.Pause,
-    //     },
-    // });
+    const player = createAudioPlayer({
+        behaviors: {
+            noSubscriber: NoSubscriberBehavior.Pause,
+        },
+    });
 
-    // var resource = createAudioResource('../assets/audio/bg.mp3');
+    //const resource = createAudioResource('./assets/audio/tts/TODO:.mp3', {});
 
     // player.play(resource);
-    // connection.subscribe(player);
+    connection.subscribe(player);
 
 }
 
 
-module.exports = {startAudio}
+module.exports = {initializeAudioPlayer}

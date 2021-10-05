@@ -10,10 +10,12 @@ module.exports = {
 	execute(msg) {
         
         const INDEX = require("../index.js")
-        const SENDPROMPTS = require("../modules/sendPrompts")
+        const START_ROUND = require("../modules/startRound")
         const TIMER = require("../modules/timer.js")
+        const AUDIO = require("../modules/audio.js")
         var usersPlaying = INDEX.gameData.usersPlaying;
         var playerCount = INDEX.config.playerCount;
+    
 
 //IGNORE BOTS////////////////////////////////////////////////////////////////////////////////////////////////
         if (msg.author.bot) return;
@@ -27,10 +29,10 @@ module.exports = {
                         
                         if (dataBlock.promptCompleted === false && INDEX.gameData.timerRunning === true) {
                             
-                            SENDPROMPTS.updateDM(msg.content, msg.author) //TODO: pass in time
+                            START_ROUND.updateDM(msg.content, msg.author) //TODO: pass in time
                             
                         }
-                        else {SENDPROMPTS.roundEndDM(msg.author)}
+                        else {START_ROUND.roundEndDM(msg.author)}
                     
                     }
                 })
@@ -53,8 +55,10 @@ module.exports = {
             usersPlaying.push(msg.author)
 
             if (usersPlaying.length < playerCount) {
-                msg.channel.send(`${msg.author} is playing, ${playerCount - usersPlaying.length} more players needed`)
-                
+                let onePlayerNeeded = playerCount - usersPlaying.length === 1
+                let playerStr = "players";      
+                if (onePlayerNeeded) {playerStr = "player"}          
+                msg.channel.send(`${msg.author} is playing in ${INDEX.gameData.voiceChannel}, I need **${playerCount - usersPlaying.length}** more ${playerStr}`)                
             }
 
             else if (usersPlaying.length === playerCount) {
@@ -70,23 +74,54 @@ module.exports = {
                     .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.jpeg")
 
                 msg.channel.send({ embeds: [START_MSG_EMBED]})
-                SENDPROMPTS.send(usersPlaying);
+                START_ROUND.send(usersPlaying);
                 gameRunning = true;
             }
 
             else {console.log("err")}
         }
-        
-        //FIXME:
+
+
+        const errorVoice = () => {
+            const ERROR_EMBED = new MessageEmbed()
+                    .setTitle("ERROR")
+                    .setColor("#ED4245")
+                    .setDescription(`${msg.author} please join a voice channel`)
+                    .setFooter("\u200B")
+
+                msg.channel.send({embeds: [ERROR_EMBED]})
+        }
+
+
+        //set server
         if (INDEX.GUILD_DATA.serverID === "") {INDEX.GUILD_DATA.serverID = msg.guild; console.log("GUILD ID: " + INDEX.GUILD_DATA.serverID);}
         
 
         switch (msg.content) {
+            
             case "signmeup":
-                addPlayer();
+
+                if (gameRunning) {return;}
+
+                console.log(INDEX.gameData.voiceChannel)
+
+                if (!msg.member.voice.channel) {errorVoice()} //TODO: check if this works w more than one voice channel
+                
+                else if (INDEX.gameData.voiceChannel === "") {
+                    AUDIO.initializeAudioPlayer(msg.member.voice.channel);
+                    INDEX.gameData.voiceChannel = msg.member.voice.channel;
+                    console.log(INDEX.gameData)
+                    addPlayer();
+                }
+
+                else {
+                    addPlayer();
+
+                }
+                
                 break;
             
-            case "reimhard.commands":
+            case "reimhard.commands": //TODO: add more e.g. stop game
 
                 const COMMANDS_EMBED = new MessageEmbed()
                     .setTitle("COMMANDS")
@@ -104,6 +139,7 @@ module.exports = {
                 break;
 
             case "reimhard.settings": //TODO: EMBED, IMPLEMENT
+                if (gameRunning) {return;}
                 msg.channel.send("```TODO```")
 
         }

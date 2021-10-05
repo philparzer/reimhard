@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { Client, Intents} = require('discord.js');
 const fs = require('fs');
-const CLIENT = new Client({ intents: [Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES] });
+const CLIENT = new Client({ intents: [Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES, 'GUILD_VOICE_STATES'] });
 
 CLIENT.login(process.env.BOT_TOKEN)
 
@@ -13,8 +13,8 @@ const GUILD_DATA = {
 
 var config = {
     language: 'de', //ISO language code
-    playerCount: 2, //players needed until reimhard starts the game
-	countdown: 60, //in seconds
+    playerCount: 1, //players needed until reimhard starts the game
+	countdown: 30, //in seconds
 	rounds: 5 //how many prompts are send to each user
 }
 
@@ -23,7 +23,8 @@ var gameData = {
 	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, TODO: entry1:, TODO: entry2: TODO: outputString: , promptCompleted:bool, votes:int}
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
-	currentRound: 1
+	currentRound: 1,
+	voiceChannel: ""
 }
 
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
