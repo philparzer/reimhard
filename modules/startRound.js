@@ -6,11 +6,12 @@ const END_ROUND = require("./endRound.js")
 const INITIALIZE_GAME = require("./initializeGame.js");
 const TIMER = require("./timer.js")
 const ROUNDS = INDEX.config.rounds;
+const AUDIO = require("./audio.js")
 
 var startSeconds;
 
-var prompt1 = "Der Mond scheint auf des Hundes Schnauze" //TODO: pick randomly from data structure
-var prompt2 = "Hinten unten bei mir in der Küche"//TODO: pick randomly from data structure
+var prompt1 = "Ich saß auf einem Steine und deckte Bein mit Beine," //TODO: remove global and pick randomly from data structure
+var prompt2 = "Hinten unten bei mir in der Küche"//TODO: remove global pick randomly from data structure
 
 //send round prompts to all players///////////////////////////////////////////////////////////////////////////////////////////////////////
 const send = (usersPlaying) => {
@@ -30,19 +31,20 @@ const send = (usersPlaying) => {
         usersPlaying.forEach(user => {
 
             setTimeout(function(){
-
+                //ROUND HAS ENDED
                 INDEX.gameData.userRoundData.forEach(dataBlock => {
 
-                    //FIXME:
                     if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
-                    //TODO:
-                    //END_ROUND.todo()
+                    AUDIO.mixEntryAndBG(dataBlock.player.tag); //TODO: async?
                 })
+
+                END_ROUND.initRapBattle();
            
             }, INDEX.config.countdown * 1000);
 
-
+            
             //TODO: pick prompts here randomly from data structure
+            //TODO: set reimhards prompts and entry1 if he's playing - remove placeholders below
 
 
             INDEX.gameData.userRoundData.push({
@@ -63,10 +65,17 @@ const send = (usersPlaying) => {
                     {name: `\u200B`, value: `\u200B`}
                 )
                 .setFooter(`time left: ${INDEX.config.countdown}s`)
-                    
-            user.send({ embeds: [PROMPT_EMBED]});
             
+            if (user.player !== "Reimhard") { user.send({ embeds: [PROMPT_EMBED]});}
             
+            // this generates reimhard's message instantly
+            else {
+                INDEX.gameData.userRoundData.forEach(userData => {
+
+                    if (userData.player === user) {userData.entry1 = "TODO get randomly1"} 
+                })
+                updateDM("TODO get randomly2", user);
+            }
            
             
         })
@@ -76,10 +85,10 @@ const send = (usersPlaying) => {
 }
 
 //send preview of user's entries after they sent a DM///////////////////////////////////////////////////////////////////////////////////////////////////////
-const updateDM = (entry, user) => { //FIXME:
+const updateDM = (entry, user) => {
 
     let updatedTime = new Date().getTime() / 1000;
-    let timeLeft = Math.floor((startSeconds + INDEX.config.countdown) - updatedTime); //TODO: make this global somehow
+    let timeLeft = Math.floor((startSeconds + INDEX.config.countdown) - updatedTime);
     let shouldSendDoneDM = false;
 
     INDEX.gameData.userRoundData.forEach(dataBlock => {
@@ -108,8 +117,8 @@ const updateDM = (entry, user) => { //FIXME:
                         {name: `\u200B`, value: `\u200B`}
                     )
                     .setFooter(`time left: ${timeLeft}s`)
-                        
-                    dataBlock.player.send({ embeds: [updatedDM]});
+   
+                    if (user.player !== "Reimhard") {dataBlock.player.send({ embeds: [updatedDM]});}
 
                     if (shouldSendDoneDM) {doneDM(dataBlock.player);}
 
@@ -126,7 +135,7 @@ const doneDM = (user) => {
     const DONE_DM_EMBED = new MessageEmbed()
                 .setColor("#EB7E28")
                 .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} COMPLETED`) 
-            user.send({ embeds: [DONE_DM_EMBED]});
+                if (user.player !== "Reimhard") { user.send({ embeds: [DONE_DM_EMBED]}); }
 }
 
 
@@ -135,14 +144,15 @@ const notCompletedDM = (user) => {
                 .setColor("#ED4245")
                 .setAuthor(`TIME'S UP FOR ROUND ${INDEX.gameData.currentRound -1}`)
                 .setFooter('hurry up next time')
-            user.send({ embeds: [NOT_COMPLETED_DM_EMBED]});
+                if (user.player !== "Reimhard") { user.send({ embeds: [NOT_COMPLETED_DM_EMBED]}); }
+                
 }
 
 const roundEndDM = (user) => {
     const ROUND_END_DM_EMBED = new MessageEmbed()
                 .setColor("#EB7E28")
                 .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} HAS ENDED`)
-            user.send({ embeds: [ROUND_END_DM_EMBED]});
+                if (user.player !== "Reimhard") { user.send({ embeds: [ROUND_END_DM_EMBED]}); }
 }
 
 

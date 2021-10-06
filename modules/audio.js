@@ -1,6 +1,6 @@
 const { createAudioPlayer, NoSubscriberBehavior, joinVoiceChannel } = require('@discordjs/voice');
 const { join } = require('path');
-const { createAudioResource, StreamType } = require('@discordjs/voice');
+const { createAudioResource, StreamType, AudioPlayerStatus } = require('@discordjs/voice');
 const INDEX = require('../index.js');
 var ffmpeg = require('fluent-ffmpeg');
 const path = require('path/posix');
@@ -8,10 +8,10 @@ var command = ffmpeg();
 
 var connection;
 var player;
+//TODO: const SCRATCH_SOUND = createAudioResource(TODO, {});
+
 
 const initializeAudioPlayer = (channel) => {
-
-    console.log("channel to join: " + JSON.stringify(channel))
 
     connection = joinVoiceChannel({
         channelId: channel.id,
@@ -30,12 +30,11 @@ const initializeAudioPlayer = (channel) => {
 
 }
 
-
-//TODO: TEST + think about bg volume
-const mixEntryAndBG = (userTag) => { //async?
+const mixEntryAndBG = (userTag) => {
     
-    let pathToBG = "assets/audio/bg.mp3";
     let pathToAudio = "assets/audio/tts/";
+    let pathToBG = "assets/audio/bg/bg.mp3";
+
     let pathToUserTTS = pathToAudio + userTag + ".mp3";
     let mixedAudioPath = pathToAudio + userTag + "MIXED.mp3";
 
@@ -52,31 +51,23 @@ const mixEntryAndBG = (userTag) => { //async?
         console.log(output, 'files mixed and saved.')
       })
       .saveToFile(mixedAudioPath)
-
-    //TODO: Remove this audio test
-    
-    const resource = createAudioResource(mixedAudioPath, {});
-    player.play(resource);
 }
 
-/*TODO: 
+//TODO: implement these
+// const playUserEntry = (user) => {
+//     const resource = createAudioResource(pathToAudio + user.tag + "MIXED.mp3", {});
+//     player.play(resource);
 
-implement something like this call from end round?
+//     player.on(AudioPlayerStatus.Idle, () => {
+//         END_ROUND.nextPlayer();
+//     })
+// }
 
-const playUserEntry = (user) => {
-    const resource = createAudioResource(mixedAudioPath, {});
-    player.play(resource);
-}
-
-
-implement scratch sound 
-
-const playScratch = (user) => {
-    const resource = createAudioResource(TODO, {});
-    player.play(resource);
-}
-
-*/
+// const playTransition = (user) => {
+//     //player.play(SCRATCH_SOUND);
+// }
 
 
-module.exports = {initializeAudioPlayer, mixEntryAndBG}
+
+
+module.exports = {initializeAudioPlayer, mixEntryAndBG}  //playTransition, playUserEntry

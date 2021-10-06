@@ -14,13 +14,13 @@ const GUILD_DATA = {
 var config = {
     language: 'de', //ISO language code
     playerCount: 1, //players needed until reimhard starts the game
-	countdown: 30, //in seconds
+	countdown: 20, //in seconds
 	rounds: 5 //how many prompts are send to each user
 }
 
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
-	userRoundData: [], //arr of round-specific data [{ {player:discord.user,}, prompt:string, TODO: entry1:, TODO: entry2: TODO: outputString: , promptCompleted:bool, votes:int}
+	userRoundData: [], //arr of round-specific data [{player:discord.user,}, prompt1:string, prompt2:string, entry1:string, entry2:string, promptCompleted:bool, votes:int}]
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
 	currentRound: 1,
@@ -40,8 +40,6 @@ for (const file of eventFiles) {
 		CLIENT.on(event.name, (...args) => event.execute(...args));
 	}
 }
-
-
 
 
 module.exports = {config, gameData, CLIENT, GUILD_DATA}

@@ -2,9 +2,6 @@ const googleTTS = require('node-google-tts-api');
 const fs = require('fs');
 const TTS = new googleTTS();
 const INDEX = require("../index.js")
-const AUDIO = require("./audio.js")
-
-
 
 const generate = (user) => { //TODO: get completed entry foreach user, write files to respective folder filename = user.id?
 
@@ -13,9 +10,16 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
     INDEX.gameData.userRoundData.forEach(dataBlock => {
 
         if (dataBlock.player === user) {
+
+            //TODO: do something if reimhard
+
             ttsText = dataBlock.prompt1 + ", " + dataBlock.prompt2 + ", " + dataBlock.entry1 + ", " + dataBlock.entry2 + ", ";
         }
+
     })
+
+
+    //TODO: do something if reimhard
 
     //less than 200chars
     if (ttsText.length < 200){
@@ -26,10 +30,6 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
           }).then(data => {
             // returns mp3 audio src buffer
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
-
-            //TODO: change position
-            console.log("mix audio")
-            AUDIO.mixEntryAndBG(user.tag) //TODO: implement different bgs
         });
     }
 
@@ -45,10 +45,6 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
           }).then(arr => {
             let data = TTS.concat(arr);
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
-
-            //TODO: change position
-            console.log("mix audio")
-            AUDIO.mixEntryAndBG(user.tag) //TODO: implement different bgs
           });
     }    
 }
