@@ -28,19 +28,28 @@ const send = (usersPlaying) => {
         INDEX.gameData.currentRound++;
         startSeconds = new Date().getTime() / 1000;
 
-        usersPlaying.forEach(user => {
-
-            setTimeout(function(){
-                //ROUND HAS ENDED
+        //ROUND HAS ENDED
+        setTimeout(function(){
+            
+            usersPlaying.forEach(user => {
                 INDEX.gameData.userRoundData.forEach(dataBlock => {
 
                     if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
                     AUDIO.mixEntryAndBG(dataBlock.player.tag); //TODO: async?
                 })
+            })
 
+            //Time until battle starts
+            setTimeout(function(){
                 END_ROUND.initRapBattle();
-           
-            }, INDEX.config.countdown * 1000);
+            }, 3000)
+            
+       
+        }, INDEX.config.countdown * 1000);
+
+
+        //sends prompts to players
+        usersPlaying.forEach(user => {
 
             
             //TODO: pick prompts here randomly from data structure
@@ -54,7 +63,9 @@ const send = (usersPlaying) => {
                 entry1: "___",
                 entry2: "___",
                 promptCompleted: false,
-                votes: 0
+                votes: 0,
+                votingCompleted: false,
+                opponent: ""
             });
 
             const PROMPT_EMBED = new MessageEmbed()

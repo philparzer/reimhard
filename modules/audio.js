@@ -34,8 +34,8 @@ const mixEntryAndBG = (userTag) => {
     
     let pathToAudio = "assets/audio/tts/";
     let pathToBG = "assets/audio/bg/bg.mp3";
-
     let pathToUserTTS = pathToAudio + userTag + ".mp3";
+    
     let mixedAudioPath = pathToAudio + userTag + "MIXED.mp3";
 
 
@@ -48,20 +48,20 @@ const mixEntryAndBG = (userTag) => {
         }
       ])
       .on('end', async function (output) {
-        console.log(output, 'files mixed and saved.')
+        console.log(output, `${user.tag}'s files mixed and saved.`) //FIXME: check why this prints twice
       })
       .saveToFile(mixedAudioPath)
 }
 
-//TODO: implement these
-// const playUserEntry = (user) => {
-//     const resource = createAudioResource(pathToAudio + user.tag + "MIXED.mp3", {});
-//     player.play(resource);
+//TODO: test and implement
+const playUserEntry = (user) => {
+    const resource = createAudioResource(pathToAudio + user.tag + "MIXED.mp3", {});
+    player.play(resource);
 
-//     player.on(AudioPlayerStatus.Idle, () => {
-//         END_ROUND.nextPlayer();
-//     })
-// }
+    player.on(AudioPlayerStatus.Idle, () => {
+        END_ROUND.voting();
+    })
+}
 
 // const playTransition = (user) => {
 //     //player.play(SCRATCH_SOUND);
@@ -70,4 +70,4 @@ const mixEntryAndBG = (userTag) => {
 
 
 
-module.exports = {initializeAudioPlayer, mixEntryAndBG}  //playTransition, playUserEntry
+module.exports = {initializeAudioPlayer, playUserEntry, mixEntryAndBG}  //playTransition,

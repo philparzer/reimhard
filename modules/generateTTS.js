@@ -35,9 +35,6 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
 
     //bypass Google's 200char limit by concatenating audio files
     else {
-
-        console.log("more than 200 chars")
-
         TTS.get({
             text: ttsText,
             lang: INDEX.config.language,

@@ -7,13 +7,6 @@ const START_TIMER = () => {
 
     INDEX.gameData.timerRunning = true;
 
-    //FIXME:
-    console.log("DEBUG CHANNEL AUDIO")
-    console.log(INDEX.gameData.usersPlaying[0].id)
-    let member = INDEX.GUILD_DATA.serverID.members.cache.get(INDEX.gameData.usersPlaying[0].id);
-    console.log(member)
-    //FIXME:
-
     setTimeout(function(){ 
         
         INDEX.gameData.timerRunning = false;

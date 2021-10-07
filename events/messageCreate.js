@@ -103,14 +103,11 @@ module.exports = {
 
                 if (gameRunning) {return;}
 
-                console.log(INDEX.gameData.voiceChannel)
-
                 if (!msg.member.voice.channel) {errorVoice()} //TODO: check if this works w more than one voice channel
                 
                 else if (INDEX.gameData.voiceChannel === "") {
                     AUDIO.initializeAudioPlayer(msg.member.voice.channel);
                     INDEX.gameData.voiceChannel = msg.member.voice.channel;
-                    console.log(INDEX.gameData)
                     addPlayer();
                 }
 

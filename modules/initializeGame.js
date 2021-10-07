@@ -15,6 +15,7 @@ const initStats = (usernamesPlaying) => {
 
     //if usersPlaying is odd => add reimhard as player for odd one out
     if (i % 2 !== 0) {
+
         INDEX.gameData.userStats.push({
             player: "Reimhard",
             score: 0
@@ -25,7 +26,7 @@ const initStats = (usernamesPlaying) => {
         })
     }
     
-    console.log("users:")
+    console.log("users: ##########################################################")
     console.log(INDEX.gameData.userStats)
 
 }

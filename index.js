@@ -20,7 +20,7 @@ var config = {
 
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
-	userRoundData: [], //arr of round-specific data [{player:discord.user,}, prompt1:string, prompt2:string, entry1:string, entry2:string, promptCompleted:bool, votes:int}]
+	userRoundData: [], //arr of round-specific data [player:{discord.user}, prompt1:string, prompt2:string, entry1:string, entry2:string, promptCompleted:bool, votes:int, votingCompleted: bool, opponent{discord.user/reimhard}}]
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
 	currentRound: 1,
