@@ -35,7 +35,7 @@ const send = (usersPlaying) => {
                 INDEX.gameData.userRoundData.forEach(dataBlock => {
 
                     if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
-                    AUDIO.mixEntryAndBG(dataBlock.player.tag); //TODO: async?
+                    AUDIO.mixEntryAndBG(dataBlock.player.tag); //TODO: async? maybe mixEntryAndBG recursive call
                 })
             })
 

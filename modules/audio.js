@@ -48,7 +48,7 @@ const mixEntryAndBG = (userTag) => {
         }
       ])
       .on('end', async function (output) {
-        console.log(output, `${user.tag}'s files mixed and saved.`) //FIXME: check why this prints twice
+        console.log(output, `${userTag}'s files mixed and saved.`) //FIXME: check why this prints twice
       })
       .saveToFile(mixedAudioPath)
 }
