@@ -35,12 +35,16 @@ const send = (usersPlaying) => {
                 INDEX.gameData.userRoundData.forEach(dataBlock => {
 
                     if (dataBlock.player === user && dataBlock.promptCompleted === false) {notCompletedDM(user);} 
-                    AUDIO.mixEntryAndBG(dataBlock.player.tag); //TODO: async? maybe mixEntryAndBG recursive call
                 })
             })
 
+            //Mix all users' tts w bg beat
+            console.log("\n-----------------ffmpeg-----------------")
+            AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag);
+
             //Time until battle starts
             setTimeout(function(){
+
                 END_ROUND.initRapBattle();
             }, 3000)
             
@@ -114,7 +118,7 @@ const updateDM = (entry, user) => {
                         dataBlock.entry2 = entry;
                         dataBlock.promptCompleted = true;
                         shouldSendDoneDM = true;
-                        GENERATE_TTS.generate(user);
+                        GENERATE_TTS.generate(user); //TODO: think about recursion in generate tts async
                     }
 
                     else {console.log("updateDM_ERR")}

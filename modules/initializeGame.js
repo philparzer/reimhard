@@ -26,7 +26,7 @@ const initStats = (usernamesPlaying) => {
         })
     }
     
-    console.log("users: ##########################################################")
+    console.log("\n-----------------users playing-----------------")
     console.log(INDEX.gameData.userStats)
 
 }

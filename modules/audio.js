@@ -8,6 +8,8 @@ var command = ffmpeg();
 
 var connection;
 var player;
+var mixIterator = 0;
+
 //TODO: const SCRATCH_SOUND = createAudioResource(TODO, {});
 
 
@@ -47,8 +49,18 @@ const mixEntryAndBG = (userTag) => {
            filter : 'amix', options: { inputs : 2, duration : 'shortest' }
         }
       ])
-      .on('end', async function (output) {
-        console.log(output, `${userTag}'s files mixed and saved.`) //FIXME: check why this prints twice
+      .on('end', async function (output) { 
+        console.log(output, `${userTag}'s entry mixed and saved.`)
+        
+        //recursive call that mixes all remaining users' audio files
+        if (mixIterator < INDEX.gameData.userRoundData.length-1)
+        {
+            mixIterator++;
+            mixEntryAndBG(INDEX.gameData.userRoundData[mixIterator].player.tag);
+        }
+
+        else {mixIterator = 0}
+
       })
       .saveToFile(mixedAudioPath)
 }

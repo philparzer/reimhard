@@ -1,6 +1,14 @@
 const { PlayerSubscription } = require("@discordjs/voice")
 const INDEX = require("../index.js")
 const AUDIO = require("./audio.js")
+const GENERATE_TTS = require("./generateTTS")
+
+const createEntryAudio = () => {
+    console.log("\n-----------------tts-----------------")
+    GENERATE_TTS.generate(INDEX.gameData.userRoundData[0]); //try this
+}
+
+
 
 //split contestants into groups of two and start first 1v1 rap battle
 const initRapBattle = () => {
@@ -24,7 +32,7 @@ const initRapBattle = () => {
 
     }
 
-    console.log("-----------------1v1s-----------------")
+    console.log("\n-----------------1v1s-----------------")
     INDEX.gameData.userRoundData.forEach(user => console.log(user.player.tag + " is up against " + user.opponent.tag))
 
     startOneVOne();
@@ -74,4 +82,4 @@ const nextRound = () => {
     //initiate next Round
 }
 
-module.exports = {initRapBattle, voting}
+module.exports = {initRapBattle, voting, createEntryAudio}

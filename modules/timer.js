@@ -3,17 +3,14 @@ const AUDIO = require("./audio.js")
 
 const START_TIMER = () => {
 
-    console.log("//////////////////////////////////// current round: " + INDEX.gameData.currentRound + " ///////////////////////////////////////////////////////")
-
     INDEX.gameData.timerRunning = true;
 
     setTimeout(function(){ 
         
         INDEX.gameData.timerRunning = false;
-        console.log("-----------------round data-----------------")
+        console.log("\n-----------------ROUND " + (INDEX.gameData.currentRound -1) + "-----------------")
         console.log(INDEX.gameData.userRoundData)
-        
-        //AUDIO.startAudio(member.guild.channels) //FIXME:
+    
 
     }, INDEX.config.countdown * 1000);
 }

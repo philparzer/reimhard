@@ -1,9 +1,11 @@
 const googleTTS = require('node-google-tts-api');
 const fs = require('fs');
 const TTS = new googleTTS();
-const INDEX = require("../index.js")
+const INDEX = require("../index.js");
+const AUDIO = require("./audio.js");
 
-const generate = (user) => { //TODO: get completed entry foreach user, write files to respective folder filename = user.id?
+
+const generate = (user) => { //TODO: think about async recursion
 
     var ttsText = "";
 
@@ -11,15 +13,10 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
 
         if (dataBlock.player === user) {
 
-            //TODO: do something if reimhard
-
             ttsText = dataBlock.prompt1 + ", " + dataBlock.prompt2 + ", " + dataBlock.entry1 + ", " + dataBlock.entry2 + ", ";
         }
 
     })
-
-
-    //TODO: do something if reimhard
 
     //less than 200chars
     if (ttsText.length < 200){
@@ -28,8 +25,9 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
             text: ttsText, 
             lang: INDEX.config.language
           }).then(data => {
-            // returns mp3 audio src buffer
+           
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
+            console.log(`${user.tag}'s tts saved.`)
         });
     }
 
@@ -42,12 +40,13 @@ const generate = (user) => { //TODO: get completed entry foreach user, write fil
           }).then(arr => {
             let data = TTS.concat(arr);
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
+            console.log(`${user.tag}'s tts saved.`)
           });
     }    
 }
 
 
-//TODO: generate user intro e.g "ur turn ${user.username}!"
+//TODO: maybe generate user intro e.g "ur turn ${user.username}!"
 /*
     const generateIntro = () => {
         generate user intro e.g "ur turn ${user.username}!"
