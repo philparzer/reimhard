@@ -38,16 +38,8 @@ const send = (usersPlaying) => {
                 })
             })
 
-            //Mix all users' tts w bg beat
-            console.log("\n-----------------ffmpeg-----------------")
-            AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag); //TODO: what if tts not generated
-
-            //Time until battle starts
-            setTimeout(function(){
-
-                END_ROUND.initRapBattle();
-            }, 3000)
-            
+            //starts async mp3 creation
+            END_ROUND.createEntryAudio();
        
         }, INDEX.config.countdown * 1000);
 
@@ -118,7 +110,7 @@ const updateDM = (entry, user) => {
                         dataBlock.entry2 = entry;
                         dataBlock.promptCompleted = true;
                         shouldSendDoneDM = true;
-                        GENERATE_TTS.generate(user); //TODO: think about recursion in generate tts async
+                        // GENERATE_TTS.generate(user); //TODO: think about recursion in generate tts async
                     }
 
                     else {console.log("updateDM_ERR")}

@@ -9,9 +9,17 @@ var votingUsers = [];
 var contestants = [];
 var contestantsIterator = 0;
 
+let user1Prompt1 = ""; let user2Prompt1 = "";
+let user1Prompt2 = ""; let user2Prompt2 = "";
+let user1Entry1 = ""; let user2Entry1 = "";
+let user1Entry2 = ""; let user2Entry2 = "";
+
+
+
+
 const createEntryAudio = () => {
     console.log("\n-----------------tts-----------------")
-    GENERATE_TTS.generate(INDEX.gameData.userRoundData[0]); //TODO: try this recursive in tts
+    GENERATE_TTS.generate(INDEX.gameData.userRoundData[0].player);
 }
 
 
@@ -58,33 +66,33 @@ const initRapBattle = () => {
     INDEX.gameData.textChannel.send({ embeds: [START_BATTLE_EMBED]})
 
     battleIterator = 0;
+
+    console.log("\n-----------------AUDIO-----------------")
     handleOneVOne();
 
 }
 
 
 const voting = (user) => {
-    //FIXME:clean this up
     //TODO:
-    //set userRoundData.votingComplete = true 
+    //set userRoundData.votingComplete = true or remove?
 
     //send vote message
 
+    
+
     if (votingUsers.length < 2)
         {
+            console.log("::::done")
             votingUsers.push(user);
-            console.log("played entry, pushing " + user.tag)
-            console.log("contestant iterator = " + contestantsIterator)
-            console.log("votingUsers = " + JSON.stringify(votingUsers))
-            handleOneVOne();
+            handleOneVOne(); 
         }
 
     else {
 
-        let user1Prompt1 = ""; let user2Prompt1 = "";
-        let user1Prompt2 = ""; let user2Prompt2 = "";
-        let user1Entry1 = ""; let user2Entry1 = "";
-        let user1Entry2 = ""; let user2Entry2 = "";
+        console.log("\n-----------------VOTING-----------------")
+        console.log("voting users")
+        console.log(votingUsers)
 
         INDEX.gameData.userRoundData.forEach((dataBlock) => {
             if (dataBlock.player === votingUsers[0])
@@ -105,14 +113,14 @@ const voting = (user) => {
         })
 
         const VOTE_EMBED = new MessageEmbed()
-                .setColor("#F2C12B")
-                .setAuthor(`VOTE NOW`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png") //TODO: use author's profile?
+                .setColor("#EB7C28")
+                .setTitle(`VOTE NOW`) //TODO: use author's profile?
                 .addFields(
                     {name: `\u200B`, value: `:one:\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
                     {name: `\u200B`, value: `:two:\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
-                .setFooter(`TODO SHOW VOTE TIME`)
+                .setFooter(`${INDEX.config.voteTime}s left to vote`)
 
         INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED]})
         
@@ -125,7 +133,7 @@ const voting = (user) => {
 
         votingUsers = [];
 
-        }, 15000) //TODO: set in config
+        }, INDEX.config.voteTime * 1000)
     }
     
 
@@ -143,10 +151,8 @@ const nextOneVOne = () => {
 
 
 const handleOneVOne = () => {
-    //FIXME:clean this up
 
     if (contestantsIterator < 2) {
-        console.log("playing audio by: " + contestants[contestantsIterator].contestant.tag)
         AUDIO.playUserEntry(contestants[contestantsIterator].contestant);
         contestantsIterator++;
     }

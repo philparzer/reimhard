@@ -10,6 +10,7 @@ let pathToAudio = "assets/audio/tts/";
 var connection;
 var player;
 var mixIterator = 0;
+var currentUser;
 
 //TODO: const SCRATCH_SOUND = createAudioResource(TODO, {});
 
@@ -35,7 +36,7 @@ function initializeAudioPlayer(channel) {
 }
 
 const mixEntryAndBG = (userTag) => {
-    
+    const END_ROUND = require('./endRound.js')
 
     let pathToBG = "assets/audio/bg/bg.mp3";
     let pathToUserTTS = pathToAudio + userTag + ".mp3";
@@ -61,7 +62,10 @@ const mixEntryAndBG = (userTag) => {
             mixEntryAndBG(INDEX.gameData.userRoundData[mixIterator].player.tag);
         }
 
-        else {mixIterator = 0}
+        else {
+            mixIterator = 0;
+            END_ROUND.initRapBattle();
+        }
 
       })
       .saveToFile(mixedAudioPath)
@@ -70,21 +74,29 @@ const mixEntryAndBG = (userTag) => {
 //TODO: test and implement
 
 const playUserEntry = (user) => {
-    console.log("\nplaying::::")
+
     const END_ROUND = require('./endRound.js')
-    
     const resource = createAudioResource(pathToAudio + user.tag + "MIXED.mp3", {});
     player.play(resource);
 
+    player.on(AudioPlayerStatus.Playing , () =>{
+        currentUser = user;
+    })
+
     player.on(AudioPlayerStatus.Idle, () => {
-        console.log("\n::::done")
-        END_ROUND.voting(user);
+        console.log("idle triggered")
+        END_ROUND.voting(currentUser);
     })
 }
 
 // const playTransition = (user) => {
 //     //player.play(SCRATCH_SOUND);
 // }
+
+
+// const playPlayerIntro = (user) => {
+
+//}
 
 
 module.exports = {initializeAudioPlayer, playUserEntry, mixEntryAndBG}  //playTransition,

@@ -3,6 +3,14 @@ const fs = require('fs');
 const TTS = new googleTTS();
 const INDEX = require("../index.js");
 const AUDIO = require("./audio.js");
+var ttsIterator = 0;
+
+const checkForEmpty = (entry) => {
+    
+    if (entry === "___") {return ""}
+    
+    return entry;
+}
 
 
 const generate = (user) => { //TODO: think about async recursion
@@ -13,7 +21,7 @@ const generate = (user) => { //TODO: think about async recursion
 
         if (dataBlock.player === user) {
 
-            ttsText = dataBlock.prompt1 + ", " + dataBlock.prompt2 + ", " + dataBlock.entry1 + ", " + dataBlock.entry2 + ", ";
+            ttsText = dataBlock.prompt1 + ", " + dataBlock.prompt2 + ", " + checkForEmpty(dataBlock.entry1) + ", " + checkForEmpty(dataBlock.entry2) + ", ";
         }
 
     })
@@ -28,6 +36,19 @@ const generate = (user) => { //TODO: think about async recursion
            
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
             console.log(`${user.tag}'s tts saved.`)
+
+            if (ttsIterator < INDEX.gameData.userRoundData.length -1)
+            {
+                ttsIterator++;
+                generate(INDEX.gameData.userRoundData[ttsIterator].player)
+            }
+
+            else {
+                ttsIterator = 0;
+                console.log("\n-----------------ffmpeg-----------------")
+                AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag); //mix audio after tts is done
+            }
+
         });
     }
 
@@ -41,6 +62,19 @@ const generate = (user) => { //TODO: think about async recursion
             let data = TTS.concat(arr);
             fs.writeFileSync(`assets/audio/tts/${user.tag}.mp3`, data);
             console.log(`${user.tag}'s tts saved.`)
+
+            if (ttsIterator < INDEX.gameData.userRoundData.length -1)
+            {
+                ttsIterator++;
+                generate(INDEX.gameData.userRoundData[ttsIterator].player)
+            }
+
+            else {
+                ttsIterator = 0;
+                console.log("\n-----------------ffmpeg-----------------")
+                AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag); //mix audio after tts is done
+            }
+
           });
     }    
 }
