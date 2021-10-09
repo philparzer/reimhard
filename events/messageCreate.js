@@ -11,7 +11,6 @@ module.exports = {
         
         const INDEX = require("../index.js")
         const START_ROUND = require("../modules/startRound")
-        const TIMER = require("../modules/timer.js")
         const AUDIO = require("../modules/audio.js")
         var usersPlaying = INDEX.gameData.usersPlaying;
         var playerCount = INDEX.config.playerCount;
@@ -63,18 +62,25 @@ module.exports = {
 
             else if (usersPlaying.length === playerCount) {
 
-                let userFields = usersPlaying.map(user => {return {name: user.tag, value: `\u200B`}})
+                
+                let userFields = usersPlaying.map(user => {return {name: `\u200B`, value: `${user}`}})
+                START_ROUND.send(usersPlaying);
+                INDEX.gameData.textChannel = msg.channel;
+
+                let oddFooter = `\u200B`
+                if (INDEX.gameData.oddPlayerCount === true) {oddFooter = "Reimhard joins the battle due to odd player count"}
 
                 const START_MSG_EMBED = new MessageEmbed()
                     .setTitle("LET'S GO")
                     .setColor("#EBE340")
                     .setDescription("give it up for our contestants")
-                    .addFields({name: `\u200B`, value: `\u200B`}, userFields)
-                    .setFooter("\u200B")
+                    .addFields(userFields, {name: `\u200B`, value: `\u200B`})
+                    .setFooter(oddFooter)
                     .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail.jpeg")
 
                 msg.channel.send({ embeds: [START_MSG_EMBED]})
-                START_ROUND.send(usersPlaying);
+                
+                
                 gameRunning = true;
             }
 

@@ -2,10 +2,11 @@ const { createAudioPlayer, NoSubscriberBehavior, joinVoiceChannel } = require('@
 const { join } = require('path');
 const { createAudioResource, StreamType, AudioPlayerStatus } = require('@discordjs/voice');
 const INDEX = require('../index.js');
-var ffmpeg = require('fluent-ffmpeg');
-const path = require('path/posix');
-var command = ffmpeg();
 
+var ffmpeg = require('fluent-ffmpeg');
+const path = require('path/posix'); //TODO: 
+var command = ffmpeg();
+let pathToAudio = "assets/audio/tts/";
 var connection;
 var player;
 var mixIterator = 0;
@@ -13,12 +14,13 @@ var mixIterator = 0;
 //TODO: const SCRATCH_SOUND = createAudioResource(TODO, {});
 
 
-const initializeAudioPlayer = (channel) => {
+
+function initializeAudioPlayer(channel) {
 
     connection = joinVoiceChannel({
         channelId: channel.id,
         guildId: channel.guild.id,
-	    adapterCreator: channel.guild.voiceAdapterCreator,
+        adapterCreator: channel.guild.voiceAdapterCreator,
     });
 
     player = createAudioPlayer({
@@ -27,14 +29,14 @@ const initializeAudioPlayer = (channel) => {
         },
     });
 
-    
+
     connection.subscribe(player);
 
 }
 
 const mixEntryAndBG = (userTag) => {
     
-    let pathToAudio = "assets/audio/tts/";
+
     let pathToBG = "assets/audio/bg/bg.mp3";
     let pathToUserTTS = pathToAudio + userTag + ".mp3";
     
@@ -66,20 +68,23 @@ const mixEntryAndBG = (userTag) => {
 }
 
 //TODO: test and implement
+
 const playUserEntry = (user) => {
+    console.log("\nplaying::::")
+    const END_ROUND = require('./endRound.js')
+    
     const resource = createAudioResource(pathToAudio + user.tag + "MIXED.mp3", {});
     player.play(resource);
 
     player.on(AudioPlayerStatus.Idle, () => {
-        END_ROUND.voting();
+        console.log("\n::::done")
+        END_ROUND.voting(user);
     })
 }
 
 // const playTransition = (user) => {
 //     //player.play(SCRATCH_SOUND);
 // }
-
-
 
 
 module.exports = {initializeAudioPlayer, playUserEntry, mixEntryAndBG}  //playTransition,

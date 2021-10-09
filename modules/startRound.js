@@ -10,7 +10,7 @@ const AUDIO = require("./audio.js")
 
 var startSeconds;
 
-var prompt1 = "Ich saß auf einem Steine und deckte Bein mit Beine," //TODO: remove global and pick randomly from data structure
+var prompt1 = "Ich saß auf einem Steine und deckte Bein mit Beine" //TODO: remove global and pick randomly from data structure
 var prompt2 = "Hinten unten bei mir in der Küche"//TODO: remove global pick randomly from data structure
 
 //send round prompts to all players///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ const send = (usersPlaying) => {
 
             //Mix all users' tts w bg beat
             console.log("\n-----------------ffmpeg-----------------")
-            AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag);
+            AUDIO.mixEntryAndBG(INDEX.gameData.userRoundData[0].player.tag); //TODO: what if tts not generated
 
             //Time until battle starts
             setTimeout(function(){

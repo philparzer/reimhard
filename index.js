@@ -13,8 +13,8 @@ const GUILD_DATA = {
 
 var config = {
     language: 'de', //ISO language code
-    playerCount: 1, //players needed until reimhard starts the game
-	countdown: 20, //in seconds
+    playerCount: 2, //players needed until reimhard starts the game
+	countdown: 60, //in seconds
 	rounds: 5 //how many prompts are send to each user
 }
 
@@ -24,7 +24,9 @@ var gameData = {
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
 	currentRound: 1,
-	voiceChannel: ""
+	voiceChannel: "",
+	textChannel: "",
+	oddPlayerCount: false
 }
 
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
