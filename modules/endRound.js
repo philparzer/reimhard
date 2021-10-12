@@ -112,7 +112,7 @@ const voting = (user) => {
             }
         })
 
-        const row = new MessageActionRow()
+        var row = new MessageActionRow()
 			.addComponents(
 				new MessageButton()
 					.setCustomId(`${votingUsers[0].tag}`)
@@ -121,46 +121,48 @@ const voting = (user) => {
                 new MessageButton()
 					.setCustomId(`${votingUsers[1].tag}`)
 					.setLabel("2")
-					.setStyle('DANGER'),
+					.setStyle('DANGER')
 			);
 
         const VOTE_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
-                .setTitle(`VOTE NOW`) //TODO: use author's profile?
+                .setTitle(`VOTE NOW`)
                 .addFields(
                     {name: `\u200B`, value: `🔵 **1** \n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
                     {name: `\u200B`, value: `🔴 **2**\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
                 .setFooter(`${INDEX.config.voteTime}s left to vote`)
+
+        const VOTING_END_EMBED = new MessageEmbed()
+                .setColor("#EB7C28")
+                .setTitle(`VOTE NOW`)
+                .addFields(
+                    {name: `\u200B`, value: `🔵 **1** \n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔴 **2**\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
+                    {name: `\u200B`, value: `\u200B`}
+                )
+                .setFooter(`all votes are in`)
         
-        INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED], components: [row]})
-        
+        INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED], components: [row]}).then(msg => {
+            setTimeout(() => {
+                
+                row.components[0].setDisabled(true);
+                row.components[1].setDisabled(true);
+                msg.edit({embeds: [VOTING_END_EMBED], components: [row]})
+
+                //TODO: start next rap battle here
+                //TODO: reset INDEX.gameData.voted + important think about users not in userRoundData
 
 
-        // FIXME: ? REACTION COLLECTOR
-        //.then(m => {
-            
-        //     const filter = (reaction, user) => {
-        //         return reaction.emoji.name === ':one:';
-        //     };
-            
-        //     const collector = m.createReactionCollector({ filter, time: 15000 });
-            
-        //     collector.on('collect', (reaction, user) => {
-        //         console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
-        //     });
-            
-        //     collector.on('end', collected => {
-        //         console.log(`Collected ${collected.size} items`);
-        //     });
-            
-            
-        // })
+
+            }, INDEX.config.voteTime * 1000)
+        })
+
+
+        
 
     }
-    
-
 }
 
 const nextOneVOne = () => {

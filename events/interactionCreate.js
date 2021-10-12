@@ -9,7 +9,7 @@ module.exports = {
 
 	execute(inter) { //TODO: testing
 
-
+        const {MessageEmbed} = require("discord.js")
         const INDEX = require("../index.js")
 
         if (inter.isButton){
@@ -24,20 +24,39 @@ module.exports = {
                     presserData = dataBlock2;
                 }
             })
+            
+
+            const ERROR_VOTE_SELF = new MessageEmbed()
+                .setTitle(`**ERROR**`)
+                .setColor("#ED4245")
+                .setDescription("you can't vote for yourself")
+                .setFooter("\u200B");
+
+            const ERROR_VOTE_NUM = new MessageEmbed()
+                .setTitle(`**ERROR**`)
+                .setColor("#ED4245")
+                .setDescription("you've already cast your vote")
+                .setFooter("\u200B");
+
+            const SUCCESS_BOTE = new MessageEmbed()
+                .setTitle(`**SUCCESS**`)
+                .setColor("#58BFEB")
+                .setDescription(`you voted for ${voteReceiver}`)
+                .setFooter("\u200B");
+
+            if (btnPresser.tag === voteReceiver) {inter.reply({embeds: [ERROR_VOTE_SELF], ephemeral: true}); return}
+            if (INDEX.gameData.voters.includes(presserData)) {inter.reply({embeds: [ERROR_VOTE_NUM], ephemeral: true}); return}
 
 
-            if (btnPresser.tag === voteReceiver || presserData.voted) {console.log(`${btnPresser} not eligible to vote`); return}
+            INDEX.gameData.voters.push(presserData);
 
             INDEX.gameData.userRoundData.forEach(dataBlock => {
                 if (dataBlock.player.tag === voteReceiver) {
                     dataBlock.votes++;
                     presserData.voted = true;
-                    inter.reply({content: `you voted for ${voteReceiver}`, ephemeral: true});
+                    inter.reply({embeds: [SUCCESS_BOTE], ephemeral: true});
                 }
             })
-
-
-            console.log(INDEX.gameData.userRoundData);
 
         }
     }

@@ -21,13 +21,14 @@ var config = {
 
 var gameData = {
     usersPlaying: [], //arr of all Discord user Objects that are playing
-	userRoundData: [], //arr of round-specific data [player:{discord.user}, prompt1:string, prompt2:string, entry1:string, entry2:string, promptCompleted:bool, votes:int, votingCompleted: bool, opponent{discord.user/reimhard}}] //TODO: has voted bool?
+	userRoundData: [], //arr of round-specific data [player:{discord.user}, prompt1:string, prompt2:string, entry1:string, entry2:string, promptCompleted:bool, votes:int, votingCompleted: bool, opponent{discord.user/reimhard}}]
 	userStats: [], //arr of game specific data [{player:discord.user, score:int}]
 	timerRunning: false,
 	currentRound: 1,
 	voiceChannel: "",
 	textChannel: "",
-	oddPlayerCount: false
+	oddPlayerCount: false,
+	voters: []
 }
 
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,4 +46,4 @@ for (const file of eventFiles) {
 }
 
 
-module.exports = {config, gameData, CLIENT, GUILD_DATA}
+module.exports = {config, gameData, CLIENT, GUILD_DATA, CLIENT}
