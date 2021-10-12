@@ -1,6 +1,6 @@
 const { PlayerSubscription } = require("@discordjs/voice")
 const { match } = require("assert")
-const { MessageEmbed } = require("discord.js")
+const { MessageEmbed, MessageActionRow, MessageButton} = require("discord.js")
 const INDEX = require("../index.js")
 const AUDIO = require("./audio.js")
 const GENERATE_TTS = require("./generateTTS")
@@ -112,28 +112,52 @@ const voting = (user) => {
             }
         })
 
+        const row = new MessageActionRow()
+			.addComponents(
+				new MessageButton()
+					.setCustomId(`${votingUsers[0].tag}`)
+					.setLabel("1")
+					.setStyle('PRIMARY'),
+                new MessageButton()
+					.setCustomId(`${votingUsers[1].tag}`)
+					.setLabel("2")
+					.setStyle('DANGER'),
+			);
+
         const VOTE_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
                 .setTitle(`VOTE NOW`) //TODO: use author's profile?
                 .addFields(
-                    {name: `\u200B`, value: `:one:\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
-                    {name: `\u200B`, value: `:two:\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔵 **1** \n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔴 **2**\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
                 .setFooter(`${INDEX.config.voteTime}s left to vote`)
-
-        INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED]})
         
-        setTimeout(() => {
-        
-        //TODO: get votes here
-    
-        //calls next player or initiates next one v one
+        INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED], components: [row]})
         
 
-        votingUsers = [];
 
-        }, INDEX.config.voteTime * 1000)
+        // FIXME: ? REACTION COLLECTOR
+        //.then(m => {
+            
+        //     const filter = (reaction, user) => {
+        //         return reaction.emoji.name === ':one:';
+        //     };
+            
+        //     const collector = m.createReactionCollector({ filter, time: 15000 });
+            
+        //     collector.on('collect', (reaction, user) => {
+        //         console.log(`Collected ${reaction.emoji.name} from ${user.tag}`);
+        //     });
+            
+        //     collector.on('end', collected => {
+        //         console.log(`Collected ${collected.size} items`);
+        //     });
+            
+            
+        // })
+
     }
     
 

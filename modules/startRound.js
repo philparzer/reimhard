@@ -61,7 +61,8 @@ const send = (usersPlaying) => {
                 promptCompleted: false,
                 votes: 0,
                 votingCompleted: false,
-                opponent: ""
+                opponent: "",
+                voted: false
             });
 
             const PROMPT_EMBED = new MessageEmbed()
