@@ -14,7 +14,7 @@ const GUILD_DATA = {
 var config = {
     language: 'de', //ISO language code
     playerCount: 1, //players needed until reimhard starts the game
-	countdown: 20, //in seconds
+	countdown: 1, //in seconds
 	rounds: 5, //how many prompts are send to each user
 	voteTime: 15 //in seconds
 }

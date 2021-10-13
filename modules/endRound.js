@@ -42,7 +42,6 @@ const initRapBattle = () => {
                 
             }
         })
-
     }
 
     console.log("\n-----------------1v1s-----------------")
@@ -74,12 +73,6 @@ const initRapBattle = () => {
 
 
 const voting = (user) => {
-    //TODO:
-    //set userRoundData.votingComplete = true or remove?
-
-    //send vote message
-
-    
 
     if (votingUsers.length < 2)
         {
@@ -128,7 +121,7 @@ const voting = (user) => {
                 .setColor("#EB7C28")
                 .setTitle(`VOTE NOW`)
                 .addFields(
-                    {name: `\u200B`, value: `🔵 **1** \n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔵 **1**\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
                     {name: `\u200B`, value: `🔴 **2**\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
@@ -136,10 +129,9 @@ const voting = (user) => {
 
         const VOTING_END_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
-                .setTitle(`VOTE NOW`)
                 .addFields(
-                    {name: `\u200B`, value: `🔵 **1** \n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
-                    {name: `\u200B`, value: `🔴 **2**\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔵 ${votingUsers[0].tag}\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
+                    {name: `\u200B`, value: `🔴 ${votingUsers[1].tag}\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
                 )
                 .setFooter(`all votes are in`)
@@ -147,13 +139,27 @@ const voting = (user) => {
         INDEX.gameData.textChannel.send({ embeds: [VOTE_EMBED], components: [row]}).then(msg => {
             setTimeout(() => {
                 
+                let votes1;
+                let votes2;
+
+                INDEX.gameData.userRoundData.forEach(dataBlock => {
+                    if (dataBlock.player === votingUsers[0]){
+                        votes1 = dataBlock.votes;
+                    }
+
+                    else if (dataBlock.player === votingUsers[1]){
+                        votes2 = dataBlock.votes;
+                    }
+                })
+
                 row.components[0].setDisabled(true);
+                row.components[0].setLabel(`${votes1}`);
                 row.components[1].setDisabled(true);
+                row.components[1].setLabel(`${votes2}`);
                 msg.edit({embeds: [VOTING_END_EMBED], components: [row]})
 
-                //TODO: start next rap battle here
-                //TODO: reset INDEX.gameData.voted + important think about users not in userRoundData
-
+                //TODO: TESTING
+                nextOneVOne();
 
 
             }, INDEX.config.voteTime * 1000)
@@ -166,12 +172,22 @@ const voting = (user) => {
 }
 
 const nextOneVOne = () => {
-    //TODO: 
-    //check if there is a nextOneVOne coming up => 
-    //if => play some interlude mp3 wait a bit then call startOneVOne()
-    //else => call cleanUp
 
+    console.log("contestants before")
+    console.log(contestants)
 
+    //remove two contestants that just completed rap battle
+    contestants.shift();
+    contestants.shift();
+
+    console.log("contestants after")
+    console.log(contestants)
+
+    contestantsIterator = 0;
+    INDEX.gameData.voters = [];
+
+    if (contestants.length > 0) {handleOneVOne();}
+    else {cleanUp();}
 
 }
 
@@ -190,7 +206,12 @@ const cleanUp = () => {
     //TODO: 
     //delete all mp3 in /tts
     //reset userRoundData Object
-    //call nextRound
+    //then call nextRound
+
+    console.log("\nno more rap battles for this round - cleaning up")
+    console.log("roundData")
+    console.log(INDEX.gameData.userRoundData)
+
 }
 
 const nextRound = () => {
