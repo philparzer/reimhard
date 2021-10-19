@@ -1,10 +1,15 @@
-const { PlayerSubscription } = require("@discordjs/voice")
-const { match } = require("assert")
-const { MessageEmbed, MessageActionRow, MessageButton} = require("discord.js")
-const INDEX = require("../index.js")
-const AUDIO = require("./audio.js")
-const GENERATE_TTS = require("./generateTTS")
+const { MessageEmbed, MessageActionRow, MessageButton} = require("discord.js");
+const INDEX = require("../index.js");
+const AUDIO = require("./audio.js");
+const GENERATE_TTS = require("./generateTTS.js");
+const END_GAME = require("./endGame.js");
+const fs = require('fs');
+var path = require('path')
 
+
+
+
+var battleIterator = 1;
 var votingUsers = [];
 var contestants = [];
 var contestantsIterator = 0;
@@ -74,14 +79,15 @@ const initRapBattle = () => {
 
 const voting = (user) => {
 
+    votingUsers.push(user);
+
     if (votingUsers.length < 2)
         {
-            console.log("::::done")
-            votingUsers.push(user);
-            handleOneVOne(); 
+            //FIXME:
+            handleOneVOne();
         }
 
-    else {
+    if (votingUsers.length === 2) {
 
         console.log("\n-----------------VOTING-----------------")
         console.log("voting users")
@@ -117,6 +123,8 @@ const voting = (user) => {
 					.setStyle('DANGER')
 			);
 
+                //FIXME: this gets send earlier in later rounds
+
         const VOTE_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
                 .setTitle(`VOTE NOW`)
@@ -129,6 +137,7 @@ const voting = (user) => {
 
         const VOTING_END_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
+                .setTitle(`BATTLE ${INDEX.gameData.currentRound-1}.${battleIterator+1}`)
                 .addFields(
                     {name: `\u200B`, value: `🔵 ${votingUsers[0].tag}\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
                     {name: `\u200B`, value: `🔴 ${votingUsers[1].tag}\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
@@ -158,7 +167,7 @@ const voting = (user) => {
                 row.components[1].setLabel(`${votes2}`);
                 msg.edit({embeds: [VOTING_END_EMBED], components: [row]})
 
-                //TODO: TESTING
+
                 nextOneVOne();
 
 
@@ -186,7 +195,7 @@ const nextOneVOne = () => {
     contestantsIterator = 0;
     INDEX.gameData.voters = [];
 
-    if (contestants.length > 0) {handleOneVOne();}
+    if (contestants.length > 0) { battleIterator++; handleOneVOne();}
     else {cleanUp();}
 
 }
@@ -195,29 +204,78 @@ const nextOneVOne = () => {
 const handleOneVOne = () => {
 
     if (contestantsIterator < 2) {
+        console.log("...queueing entry of " + contestants[contestantsIterator].contestant.tag)
         AUDIO.playUserEntry(contestants[contestantsIterator].contestant);
         contestantsIterator++;
     }
 
-    else {contestantsIterator = 0}
+    //else {contestantsIterator = 0}
 }
 
 const cleanUp = () => {
-    //TODO: 
-    //delete all mp3 in /tts
-    //reset userRoundData Object
-    //then call nextRound
 
-    console.log("\nno more rap battles for this round - cleaning up")
-    console.log("roundData")
-    console.log(INDEX.gameData.userRoundData)
+    console.log("\n-----------------CLEANUP-----------------")
 
+    console.log("\nresetting round data")
+    INDEX.gameData.userRoundData.length = 0;
+
+    console.log("\nremoving mp3s")
+    let mp3Dir = path.join(__dirname, '..', 'assets', 'audio', 'tts');
+    let mp3s = fs.readdirSync(mp3Dir)
+
+    for (let y = 0; y < mp3s.length; y++)
+    {
+        if (mp3s[y] === ".gitkeep")
+        {
+            mp3s.splice(y, 1)
+        }
+
+        //TODO: make this work for deploy (delete only playing users)
+
+    }
+
+    console.log("\nresetting vars")
+    
+    contestants.length = 0;
+    contestantsIterator = 0;
+    votingUsers.length = 0;
+    user1Prompt1 = ""; user2Prompt1 = "";
+    user1Prompt2 = ""; user2Prompt2 = "";
+    user1Entry1 = "";  user2Entry1 = "";
+    user1Entry2 = "";  user2Entry2 = "";
+
+    let mp3Index = 0;
+
+    mp3s.forEach(mp3 => {
+        fs.unlink(path.join(mp3Dir, mp3), err => {
+            if (err){console.log(err)}
+            else {
+                
+                mp3Index++
+                console.log("deleted " + mp3)
+                if (mp3Index === mp3s.length)
+                {
+                    console.log("\n\n\n...waiting for next round to start")
+                    setTimeout(() => { nextRound();}, 5000)
+                }
+            
+            }
+        })
+    })              
 }
 
 const nextRound = () => {
-    //TODO: 
-    //check if end of game
-    //initiate next Round
+
+    if (INDEX.gameData.currentRound < INDEX.config.rounds)
+    {      
+        //FIXME:
+        //TIMEOUT DOESNT SEEM TO WORK
+        const START_ROUND = require("./startRound.js");
+        START_ROUND.send(INDEX.gameData.usersPlaying);
+    }
+
+    else {END_GAME.sendFinalScore()}
+
 }
 
 module.exports = {initRapBattle, voting, createEntryAudio}

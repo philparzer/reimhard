@@ -1,7 +1,6 @@
 const { DiscordAPIError, MessageEmbed } = require("discord.js")
 const INDEX = require("../index.js")
 const GENERATE_TTS = require("./generateTTS.js")
-const END_GAME = require("./endGame.js");
 const END_ROUND = require("./endRound.js")
 const INITIALIZE_GAME = require("./initializeGame.js");
 const TIMER = require("./timer.js")
@@ -19,13 +18,14 @@ const send = (usersPlaying) => {
     //initialize players if first round
     if (INDEX.gameData.currentRound === 1) {
         INITIALIZE_GAME.initStats(usersPlaying);
-        TIMER.START_TIMER();
+        //TODO: check if needed TIMER.START_TIMER(); 
         startSeconds = new Date().getTime() / 1000;
     }
 
     //sends prompts to players and sets round data & set round timer
     if (INDEX.gameData.currentRound < ROUNDS) {
         INDEX.gameData.currentRound++;
+        TIMER.START_TIMER(); //TODO: check if needed
         startSeconds = new Date().getTime() / 1000;
 
         //ROUND HAS ENDED
@@ -88,7 +88,7 @@ const send = (usersPlaying) => {
         })
     }
 
-    else {END_GAME.init()};
+    // `TODO: remove? else {END_GAME.init()};
 }
 
 //send preview of user's entries after they sent a DM///////////////////////////////////////////////////////////////////////////////////////////////////////

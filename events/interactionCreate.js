@@ -36,7 +36,7 @@ module.exports = {
                 .setColor("#ED4245")
                 .setDescription("you've already cast your vote")
 
-            const SUCCESS_BOTE = new MessageEmbed()
+            const SUCCESS_VOTE = new MessageEmbed()
                 .setTitle(`**SUCCESS**`)
                 .setColor("#58BFEB")
                 .setDescription(`you voted for ${voteReceiver}`)
@@ -51,8 +51,33 @@ module.exports = {
                 if (dataBlock.player.tag === voteReceiver) {
                     dataBlock.votes++;
                     presserData.voted = true;
-                    inter.reply({embeds: [SUCCESS_BOTE], ephemeral: true});
+                    inter.reply({embeds: [SUCCESS_VOTE], ephemeral: true});
                 }
+            })
+
+            console.log("executing interaction")
+            console.log(INDEX.gameData.userStats)
+
+            INDEX.gameData.userStats.forEach(statData => { //TODO: clean this up
+
+                console.log(statData.player.tag + " and " + voteReceiver)
+
+                try { //isBot
+                    if (statData.tag === voteReceiver) {
+                    console.log("someone voted for " + voteReceiver)
+                    statData.score += 1;
+                    }
+                } 
+                catch {
+                    if (statData.player.tag === voteReceiver) {
+                        console.log("someone voted for " + voteReceiver)
+                        statData.score += 1;
+                    }
+                }
+
+                
+                
+
             })
 
         }

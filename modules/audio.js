@@ -1,17 +1,15 @@
 const { createAudioPlayer, NoSubscriberBehavior, joinVoiceChannel } = require('@discordjs/voice');
-const { join } = require('path');
 const { createAudioResource, StreamType, AudioPlayerStatus } = require('@discordjs/voice');
 const INDEX = require('../index.js');
 var ffmpeg = require('fluent-ffmpeg');
-const path = require('path/posix');
 
-var command = ffmpeg();
 let pathToAudio = "assets/audio/tts/";
 var connection;
-var player;
+var player; 
 var mixIterator = 0;
 var currentUser;
-
+var idleTriggered;
+var playedAudio;
 
 
 function initializeAudioPlayer(channel) {
@@ -55,7 +53,7 @@ const mixEntryAndBG = (userTag) => {
         console.log(output, `${userTag}'s entry mixed and saved.`)
         
 
-        ffmpeg("assets/audio/transition/backspin.mp3") //TODO: use var, lower volume of transition sound?
+        ffmpeg("assets/audio/transition/backspin.mp3")
             .input(mixedAudioPath)
             .on('error', function(err) {
             console.log('An error occurred: ' + err.message);
@@ -82,24 +80,36 @@ const mixEntryAndBG = (userTag) => {
       
 }
 
-//TODO: test and implement
-
-const playUserEntry = (user) => {
-
-    const END_ROUND = require('./endRound.js')
-    const resource = createAudioResource(pathToAudio + user.tag + "Final.mp3", {});
-
-    
+const playUserEntry = (userToPlay) => {
+    playedAudio = false;
+    idleTriggered = false;
+    var END_ROUND = require('./endRound.js')
+    var resource = createAudioResource(pathToAudio + userToPlay.tag + "Final.mp3", {})
     player.play(resource);
+    currentUser = userToPlay;
+    console.log("playing:::::" + currentUser.tag)
 
-    player.on(AudioPlayerStatus.Playing , () =>{
-        currentUser = user;
+
+
+    player.on(AudioPlayerStatus.Playing, () => {
+        playedAudio = true;
     })
+
 
     player.on(AudioPlayerStatus.Idle, () => {
-        console.log("idle triggered")
-        END_ROUND.voting(currentUser);
+
+            if (!idleTriggered & playedAudio)
+            {
+                idleTriggered = true;
+                console.log("::::done " + currentUser.tag)
+                END_ROUND.voting(currentUser);
+            }
     })
+
+    player.on('error', error => {
+        console.error('Error:', error.message, 'with track', error.resource.metadata.title);
+    });
+    
 }
 
 

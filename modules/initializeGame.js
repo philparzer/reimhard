@@ -18,8 +18,9 @@ const initStats = (usernamesPlaying) => {
 
         INDEX.gameData.oddPlayerCount = true;
 
-        INDEX.gameData.userStats.push({
-            player: "Reimhard",
+        INDEX.gameData.userStats.push({ //TODO: clean this up? like  player: {"BOT": "Reimhard", tag: "Reimhard#BOT"} + random id is needed for deploy
+            player: "Reimhard", tag: "Reimhard#BOT",
+            
             score: 0
         })
 
@@ -30,7 +31,6 @@ const initStats = (usernamesPlaying) => {
     
     console.log("\n-----------------users playing-----------------")
     console.log(INDEX.gameData.userStats)
-
 }
 
 
