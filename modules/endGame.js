@@ -28,13 +28,13 @@ const sendFinalScore = () => {
                 .setColor("#58BFEB")
                 .setTitle(`SCOREBOARD`)
                 .setDescription('winners, losers and everything in between')
-                .addFields({name: `\u200B`, value: `\u200B`}, scoreBoardFields, {name: `\u200B`, value: `\u200B`})
-                .setFooter(`'signmeup' to play another round'`)
-                .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail_scoreboard.jpeg")
+                .addFields({name: `\u200B`, value: `\u200B`}, scoreBoardFields, {name: `\u200B`, value: `\u200B`},)
+                .setFooter(`use 'signmeup' to play another round`)
+                .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail_scoreboard.jpg")
 
     INDEX.gameData.textChannel.send({ embeds: [SCOREBOARD]}).then(msg => {})
 
 
-} //TODO:
+} //TODO: disconnect from voice, clean everything up
 
 module.exports = {sendFinalScore};

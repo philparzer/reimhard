@@ -195,7 +195,7 @@ const nextOneVOne = () => {
     contestantsIterator = 0;
     INDEX.gameData.voters = [];
 
-    if (contestants.length > 0) { battleIterator++; handleOneVOne();}
+    if (contestants.length > 0) { battleIterator++; handleOneVOne();} //TODO: test
     else {cleanUp();}
 
 }
@@ -268,8 +268,6 @@ const nextRound = () => {
 
     if (INDEX.gameData.currentRound < INDEX.config.rounds)
     {      
-        //FIXME:
-        //TIMEOUT DOESNT SEEM TO WORK
         const START_ROUND = require("./startRound.js");
         START_ROUND.send(INDEX.gameData.usersPlaying);
     }
