@@ -1,14 +1,32 @@
 const { MessageEmbed, MessageActionRow, MessageButton} = require("discord.js");
 const INDEX = require("../index.js");
+const AUDIO = require("./audio.js")
 
+//disconnect from voice, clean everything up
+const terminate = () => {
+    INDEX.gameData.gameRunning = false;
 
+    INDEX.gameData = {
+        usersPlaying: [],
+        userRoundData: [],
+        userStats: [],
+        timerRunning: false,
+        currentRound: 1,
+        voiceChannel: "",
+        textChannel: "",
+        oddPlayerCount: false,
+        voters: [],
+        musicPlaying: false,
+        gameRunning: false
+    }
+    
+    AUDIO.destroyAudioPlayer();
+}
+
+//sends final scoreboard
 const sendFinalScore = () => {
 
     console.log("sending score...")
-
-
-    
-
 
     let scoreBoardFields = INDEX.gameData.userStats.map(user => { 
     
@@ -32,9 +50,15 @@ const sendFinalScore = () => {
                 .setFooter(`use 'signmeup' to play another round`)
                 .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail_scoreboard.jpg")
 
-    INDEX.gameData.textChannel.send({ embeds: [SCOREBOARD]}).then(msg => {})
+    INDEX.gameData.textChannel.send({ embeds: [SCOREBOARD]}).then(msg => {
+        terminate();
+    })
 
 
-} //TODO: disconnect from voice, clean everything up
+} 
 
-module.exports = {sendFinalScore};
+
+
+
+
+module.exports = {sendFinalScore, terminate};

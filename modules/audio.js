@@ -11,7 +11,6 @@ var currentUser;
 var idleTriggered;
 var playedAudio;
 
-
 function initializeAudioPlayer(channel) {
 
     connection = joinVoiceChannel({
@@ -29,6 +28,11 @@ function initializeAudioPlayer(channel) {
 
     connection.subscribe(player);
 
+}
+
+
+const destroyAudioPlayer = () => {
+    connection.destroy();
 }
 
 const mixEntryAndBG = (userTag) => {
@@ -119,4 +123,4 @@ const playUserEntry = (userToPlay) => {
 //}
 
 
-module.exports = {initializeAudioPlayer, playUserEntry, mixEntryAndBG}
+module.exports = {initializeAudioPlayer, playUserEntry, mixEntryAndBG, destroyAudioPlayer}

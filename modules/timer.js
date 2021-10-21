@@ -8,7 +8,7 @@ const START_TIMER = () => { //FIXME: what does timer even do?
     setTimeout(function(){ 
         
         INDEX.gameData.timerRunning = false;
-        console.log("\n\n\n\n//////////////////////////////////////////\n-----------------ROUND " + (INDEX.gameData.currentRound -1) + "-----------------\n//////////////////////////////////////////")
+        console.log("\n\n\n\n//////////////////////////////////////////\n-----------------ROUND " + (INDEX.gameData.currentRound) + "-----------------\n//////////////////////////////////////////")
         console.log("usersPlaying:")
         console.log(INDEX.gameData.userStats)
         console.log("userRoundData:")

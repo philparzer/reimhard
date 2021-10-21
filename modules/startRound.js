@@ -23,8 +23,8 @@ const send = (usersPlaying) => {
     }
 
     //sends prompts to players and sets round data & set round timer
-    if (INDEX.gameData.currentRound < ROUNDS) {
-        INDEX.gameData.currentRound++;
+    if (INDEX.gameData.currentRound <= ROUNDS) {
+        
         TIMER.START_TIMER(); //TODO: check if needed
         startSeconds = new Date().getTime() / 1000;
 
@@ -66,7 +66,7 @@ const send = (usersPlaying) => {
 
             const PROMPT_EMBED = new MessageEmbed()
                 .setColor("#EBE340")
-                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
                 .addFields(
                     {name: `\u200B`, value: `\`\`\`- ${prompt1}\n- ${prompt2}\n- ___\n- ___\`\`\``},
                     {name: `\u200B`, value: `\u200B`}
@@ -88,7 +88,7 @@ const send = (usersPlaying) => {
         })
     }
 
-    // `TODO: remove? else {END_GAME.init()};
+    // TODO: remove? else {END_GAME.init()};
 }
 
 //send preview of user's entries after they sent a DM///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -118,7 +118,7 @@ const updateDM = (entry, user) => {
 
                     let updatedDM = new MessageEmbed()
                     .setColor("#F2C12B")
-                    .setAuthor(`ROUND ${INDEX.gameData.currentRound -1}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
+                    .setAuthor(`ROUND ${INDEX.gameData.currentRound}`, "https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/reimhard_md.png")
                     .addFields(
                         {name: `\u200B`, value: `\`\`\`- ${dataBlock.prompt1}\n- ${dataBlock.prompt2}\n- ${dataBlock.entry1}\n- ${dataBlock.entry2}\`\`\``},
                         {name: `\u200B`, value: `\u200B`}
@@ -141,7 +141,7 @@ const updateDM = (entry, user) => {
 const doneDM = (user) => {
     const DONE_DM_EMBED = new MessageEmbed()
                 .setColor("#EB7E28")
-                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} COMPLETED`) 
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound} COMPLETED`) 
                 if (user.player !== "Reimhard") { user.send({ embeds: [DONE_DM_EMBED]}); }
 }
 
@@ -149,7 +149,7 @@ const doneDM = (user) => {
 const notCompletedDM = (user) => {
     const NOT_COMPLETED_DM_EMBED = new MessageEmbed()
                 .setColor("#ED4245")
-                .setAuthor(`TIME'S UP FOR ROUND ${INDEX.gameData.currentRound -1}`)
+                .setAuthor(`TIME'S UP FOR ROUND ${INDEX.gameData.currentRound}`)
                 .setFooter('hurry up next time')
                 if (user.player !== "Reimhard") { user.send({ embeds: [NOT_COMPLETED_DM_EMBED]}); }
                 
@@ -158,7 +158,7 @@ const notCompletedDM = (user) => {
 const roundEndDM = (user) => {
     const ROUND_END_DM_EMBED = new MessageEmbed()
                 .setColor("#EB7E28")
-                .setAuthor(`ROUND ${INDEX.gameData.currentRound -1} HAS ENDED`)
+                .setAuthor(`ROUND ${INDEX.gameData.currentRound} HAS ENDED`)
                 if (user.player !== "Reimhard") { user.send({ embeds: [ROUND_END_DM_EMBED]}); }
 }
 

@@ -1,17 +1,12 @@
-//button voting
-
-
 module.exports = {
 	name: 'interactionCreate',
 
-
-
-
-	execute(inter) { //TODO: testing
+	execute(inter) {
 
         const {MessageEmbed} = require("discord.js")
         const INDEX = require("../index.js")
 
+        //vote interactions via vote embed buttons, adds vote to receiver's score
         if (inter.isButton){
 
             let btnPresser = inter.user;
@@ -25,7 +20,6 @@ module.exports = {
                 }
             })
             
-
             const ERROR_VOTE_SELF = new MessageEmbed()
                 .setTitle(`**ERROR**`)
                 .setColor("#ED4245")
@@ -44,7 +38,6 @@ module.exports = {
             if (btnPresser.tag === voteReceiver) {inter.reply({embeds: [ERROR_VOTE_SELF], ephemeral: true}); return}
             if (INDEX.gameData.voters.includes(presserData)) {inter.reply({embeds: [ERROR_VOTE_NUM], ephemeral: true}); return}
 
-
             INDEX.gameData.voters.push(presserData);
 
             INDEX.gameData.userRoundData.forEach(dataBlock => {
@@ -58,25 +51,20 @@ module.exports = {
             console.log("executing interaction")
             console.log(INDEX.gameData.userStats)
 
-            INDEX.gameData.userStats.forEach(statData => { //TODO: clean this up
+            INDEX.gameData.userStats.forEach(statData => {
 
-                console.log(statData.player.tag + " and " + voteReceiver)
-
-                try { //isBot
+                try { // receiver is Bot TODO: remove as soon as bot object is changed
                     if (statData.tag === voteReceiver) {
-                    console.log("someone voted for " + voteReceiver)
+                    console.log(btnPresser.tag + " voted for " + voteReceiver)
                     statData.score += 1;
                     }
                 } 
                 catch {
                     if (statData.player.tag === voteReceiver) {
-                        console.log("someone voted for " + voteReceiver)
+                        console.log(btnPresser.tag + " voted for " + voteReceiver)
                         statData.score += 1;
                     }
-                }
-
-                
-                
+                }                
 
             })
 

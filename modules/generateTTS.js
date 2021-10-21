@@ -13,7 +13,7 @@ const checkForEmpty = (entry) => {
 }
 
 
-const generate = (user) => { //TODO: think about async recursion
+const generate = (user) => {
 
     var ttsText = "";
 

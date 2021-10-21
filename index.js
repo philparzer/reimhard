@@ -7,15 +7,19 @@ CLIENT.login(process.env.BOT_TOKEN)
 
 //data///////////////////////////////////////////////////////////////////////////////////////////////////////
 
+const CONTENT_DATA = {
+	includedLanguages: ["en", "de", "ru"]
+}
+
 const GUILD_DATA = {
 	serverID: ""
-};
+}
 
 var config = {
     language: 'de', //ISO language code
     playerCount: 1, //players needed until reimhard starts the game
-	countdown: 15, //in seconds
-	rounds: 2, //how many prompts are send to each user FIXME: off by one
+	countdown: 30, //in seconds
+	rounds: 1, //how many prompts are send to each user
 	voteTime: 15 //in seconds
 }
 
@@ -29,11 +33,11 @@ var gameData = {
 	textChannel: "",
 	oddPlayerCount: false,
 	voters: [],
-	musicPlaying: false
+	musicPlaying: false,
+	gameRunning: false
 }
 
 //events///////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 
@@ -46,5 +50,4 @@ for (const file of eventFiles) {
 	}
 }
 
-
-module.exports = {config, gameData, CLIENT, GUILD_DATA, CLIENT}
+module.exports = {config, gameData, CLIENT, GUILD_DATA, CLIENT, CONTENT_DATA}

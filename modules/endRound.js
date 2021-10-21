@@ -6,9 +6,6 @@ const END_GAME = require("./endGame.js");
 const fs = require('fs');
 var path = require('path')
 
-
-
-
 var battleIterator = 1;
 var votingUsers = [];
 var contestants = [];
@@ -18,9 +15,6 @@ let user1Prompt1 = ""; let user2Prompt1 = "";
 let user1Prompt2 = ""; let user2Prompt2 = "";
 let user1Entry1 = ""; let user2Entry1 = "";
 let user1Entry2 = ""; let user2Entry2 = "";
-
-
-
 
 const createEntryAudio = () => {
     console.log("\n-----------------tts-----------------")
@@ -61,7 +55,7 @@ const initRapBattle = () => {
 
 
     const START_BATTLE_EMBED = new MessageEmbed()
-        .setTitle(`ROUND ${INDEX.gameData.currentRound-1}`)
+        .setTitle(`ROUND ${INDEX.gameData.currentRound}`)
         .setColor("#F1C02D")
         .setDescription("coming up")
         .addFields(matchUps)
@@ -83,15 +77,12 @@ const voting = (user) => {
 
     if (votingUsers.length < 2)
         {
-            //FIXME:
             handleOneVOne();
         }
 
     if (votingUsers.length === 2) {
 
         console.log("\n-----------------VOTING-----------------")
-        console.log("voting users")
-        console.log(votingUsers)
 
         INDEX.gameData.userRoundData.forEach((dataBlock) => {
             if (dataBlock.player === votingUsers[0])
@@ -123,8 +114,6 @@ const voting = (user) => {
 					.setStyle('DANGER')
 			);
 
-                //FIXME: this gets send earlier in later rounds
-
         const VOTE_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
                 .setTitle(`VOTE NOW`)
@@ -137,7 +126,7 @@ const voting = (user) => {
 
         const VOTING_END_EMBED = new MessageEmbed()
                 .setColor("#EB7C28")
-                .setTitle(`BATTLE ${INDEX.gameData.currentRound-1}.${battleIterator+1}`)
+                .setTitle(`BATTLE ${INDEX.gameData.currentRound}.${battleIterator+1}`)
                 .addFields(
                     {name: `\u200B`, value: `🔵 ${votingUsers[0].tag}\n\`\`\`- ${user1Prompt1}\n- ${user1Prompt2}\n- ${user1Entry1}\n- ${user1Entry2}\`\`\``},
                     {name: `\u200B`, value: `🔴 ${votingUsers[1].tag}\n\`\`\`- ${user2Prompt1}\n- ${user2Prompt2}\n- ${user2Entry1}\n- ${user2Entry2}\`\`\``},
@@ -173,10 +162,6 @@ const voting = (user) => {
 
             }, INDEX.config.voteTime * 1000)
         })
-
-
-        
-
     }
 }
 
@@ -195,7 +180,7 @@ const nextOneVOne = () => {
     contestantsIterator = 0;
     INDEX.gameData.voters = [];
 
-    if (contestants.length > 0) { battleIterator++; handleOneVOne();} //TODO: test
+    if (contestants.length > 0) { battleIterator++; handleOneVOne();} //TODO: test with more than one user
     else {cleanUp();}
 
 }
@@ -230,8 +215,7 @@ const cleanUp = () => {
             mp3s.splice(y, 1)
         }
 
-        //TODO: make this work for deploy (delete only playing users)
-
+        //TODO: make this work for deploy (delete only playing users' mp3)
     }
 
     console.log("\nresetting vars")
@@ -269,6 +253,7 @@ const nextRound = () => {
     if (INDEX.gameData.currentRound < INDEX.config.rounds)
     {      
         const START_ROUND = require("./startRound.js");
+        INDEX.gameData.currentRound++;
         START_ROUND.send(INDEX.gameData.usersPlaying);
     }
 

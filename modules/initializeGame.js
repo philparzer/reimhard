@@ -4,7 +4,6 @@ const INDEX = require("../index.js")
 const initStats = (usernamesPlaying) => {
     
     let i = 0;
-
     usernamesPlaying.forEach(user => {
         i++
         INDEX.gameData.userStats.push({
