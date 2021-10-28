@@ -47,7 +47,7 @@ const sendFinalScore = () => {
                 .setTitle(`SCOREBOARD`)
                 .setDescription('winners, losers and everything in between')
                 .addFields({name: `\u200B`, value: `\u200B`}, scoreBoardFields, {name: `\u200B`, value: `\u200B`},)
-                .setFooter(`use 'signmeup' to play another round`)
+                .setFooter(`use 'reimhard.start' to play another round`)
                 .setThumbnail("https://raw.githubusercontent.com/philparzer/reimhard/main/assets/img/thumbnail_scoreboard.jpg")
 
     INDEX.gameData.textChannel.send({ embeds: [SCOREBOARD]}).then(msg => {

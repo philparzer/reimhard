@@ -52,7 +52,7 @@ module.exports = {
             console.log(INDEX.gameData.userStats)
 
             INDEX.gameData.userStats.forEach(statData => {
-
+                //FIXME: voting
                 try { // receiver is Bot TODO: remove as soon as bot object is changed
                     if (statData.tag === voteReceiver) {
                     console.log(btnPresser.tag + " voted for " + voteReceiver)

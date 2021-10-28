@@ -1,3 +1,5 @@
+//FIXME: odd player count off-by-one + voting for players
+
 require('dotenv').config()
 const { Client, Intents} = require('discord.js');
 const fs = require('fs');
@@ -17,10 +19,10 @@ const GUILD_DATA = {
 
 var config = {
     language: 'de', //ISO language code
-    playerCount: 1, //players needed until reimhard starts the game
-	countdown: 30, //in seconds
+    playerCount: 2, //players needed until reimhard starts the game 
+	countdown: 60, //in seconds
 	rounds: 1, //how many prompts are send to each user
-	voteTime: 15 //in seconds
+	voteTime: 30 //in seconds
 }
 
 var gameData = {
