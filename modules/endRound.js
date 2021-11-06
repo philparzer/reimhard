@@ -178,7 +178,7 @@ const nextOneVOne = () => {
     console.log(contestants)
 
     contestantsIterator = 0;
-    INDEX.gameData.voters = [];
+    INDEX.gameData.voters = []; //FIXME: maybe better .voters.length=0
 
     if (contestants.length > 0) { battleIterator++; handleOneVOne();} //TODO: test with more than one user
     else {cleanUp();}
@@ -186,7 +186,7 @@ const nextOneVOne = () => {
 }
 
 
-const handleOneVOne = () => {
+const handleOneVOne = () => { //FIXME: this didnt work after first battle
 
     if (contestantsIterator < 2) {
         console.log("...queueing entry of " + contestants[contestantsIterator].contestant.tag)
