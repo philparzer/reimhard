@@ -3,7 +3,8 @@
 <img src="/assets/img/banner.png">
 
 
-***IMPORTANT: Reimhard is currently in early-stage testing***
+***IMPORTANT: Reimhard is sadly deprecated, hmu if you want to help me build this***
+
 
 ## dropping 🔥 rhymes since 1170
 
